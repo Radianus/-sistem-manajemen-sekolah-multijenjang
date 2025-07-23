@@ -11,8 +11,10 @@ use App\Http\Controllers\Admin\TeachingAssignmentController;
 use App\Http\Controllers\Admin\GradeController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CalendarEventController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
 
@@ -49,6 +51,7 @@ Route::middleware('auth')->group(function () {
 });
 
 
+
 // ----------- ROUTE KHUSUS ADMIN SAJA -----------
 Route::middleware(['auth', 'role:admin_sekolah'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
@@ -72,6 +75,20 @@ Route::middleware(['auth', 'role:admin_sekolah|guru|siswa|orang_tua'])->prefix('
     Route::resource('schedules', ScheduleController::class);
     Route::resource('announcements', AnnouncementController::class);
     Route::resource('calendar_events', CalendarEventController::class);
+    Route::get('reports/report-card-filter', [ReportController::class, 'showReportCardFilterForm'])->name('reports.reportCardFilterForm');
+    Route::get('reports/report-card', [ReportController::class, 'generateReportCard'])->name('reports.generateReportCard');
+    Route::get('reports/grade-summary-filter', [ReportController::class, 'showGradeSummaryFilterForm'])->name('reports.gradeSummaryFilterForm');
+    Route::get('reports/grade-summary', [ReportController::class, 'generateGradeSummary'])->name('reports.generateGradeSummary');
+
+
+    // Tugas (Assignments)
+    Route::resource('assignments', AssignmentController::class);
+    // Custom route untuk submit tugas
+    Route::post('assignments/{assignment}/submit', [AssignmentController::class, 'submitAssignment'])->name('assignments.submit');
+    // Custom route untuk form penilaian tugas
+    Route::get('submissions/{submission}/grade', [AssignmentController::class, 'showSubmissionForGrading'])->name('submissions.grade');
+    // Custom route untuk proses penilaian
+    Route::put('submissions/{submission}/grade', [AssignmentController::class, 'gradeSubmission'])->name('submissions.update_grade');
 });
 
 require __DIR__ . '/auth.php';

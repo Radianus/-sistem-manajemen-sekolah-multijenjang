@@ -158,4 +158,19 @@ class AnnouncementController extends Controller
         $announcement->delete();
         return redirect()->route('admin.announcements.index')->with('success', 'Pengumuman berhasil dihapus.');
     }
+
+    /**
+     * Display the specified announcement.
+     */
+    public function show(Announcement $announcement) // <-- TAMBAHKAN METODE INI
+    {
+        // Pastikan pengumuman ditargetkan ke user yang login, atau user adalah admin
+        $userRoles = auth()->user()->getRoleNames()->toArray();
+        $isTargeted = in_array('all', explode(',', $announcement->target_roles ?? '')) ||
+            count(array_intersect($userRoles, explode(',', $announcement->target_roles ?? ''))) > 0;
+
+        abort_if(!auth()->user()->hasRole('admin_sekolah') && !auth()->user()->hasRole('guru') && !$isTargeted, 403);
+
+        return view('admin.announcements.show', compact('announcement'));
+    }
 }

@@ -1,11 +1,13 @@
 <!-- resources/views/layouts/app.blade.php -->
 <!DOCTYPE html>
-<html lang="en" x-data="mainApp()" x-init="init()" :class="{ 'dark': darkMode }">
+<html lang="en" x-data="mainApp()" x-init="init()" :class="{ 'dark': darkMode, }">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ config('app.name', 'SekolahApp') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}"> {{-- PASTIKAN BARIS INI ADA DI SINI --}}
+
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -43,9 +45,14 @@
             return {
                 darkMode: localStorage.getItem('theme') === 'dark',
                 sidebarOpen: false,
-
+                sidebarOpen: window.innerWidth >= 1024, // default terbuka di desktop
                 init() {
                     this.updateTheme();
+                    window.addEventListener('resize', () => {
+                        if (window.innerWidth >= 1024) {
+                            this.sidebarOpen = true;
+                        }
+                    });
                 },
 
                 toggleDarkMode() {
@@ -81,34 +88,99 @@
     @auth
         <script>
             function markAllAsRead() {
-                fetch('/notifications/mark-all-as-read', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Kosongkan notifikasi atau tandai semua sebagai dibaca di DOM
-                            document.getElementById('notification-badge').innerText = '0';
+                Swal.fire({
+                    title: 'Tandai semua sudah dibaca?',
+                    text: "Anda tidak dapat mengurungkan ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, tandai!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch('{{ route('notifications.markAllAsReadBulk') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                        'content'),
+                                    'Accept': 'application/json'
+                                }
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    document.querySelectorAll('.notification-item').forEach(item => {
+                                        const parentRow = item.closest('.notification-row');
+                                        // --- Hapus SEMUA kelas yang menunjukkan status belum dibaca dari TR ---
+                                        parentRow.classList.remove(
+                                            'bg-blue-50', 'dark:bg-blue-900',
+                                            'border', 'border-blue-300', 'dark:border-blue-700',
+                                            'font-bold'
+                                        );
+                                        parentRow.classList.remove('text-blue-800',
+                                            'dark:text-blue-200'); // Hapus dari TR juga
+                                        parentRow.classList.remove('text-gray-900',
+                                            'dark:text-white'); // Hapus dari TR juga (dari bold)
 
-                            // Opsional: Sembunyikan badge kalau 0
-                            document.getElementById('notification-badge').style.display = 'none';
+                                        // --- Tambahkan kelas untuk status sudah dibaca ke TR ---
+                                        parentRow.classList.add('bg-gray-100', 'dark:bg-gray-800');
+                                        parentRow.classList.add('text-gray-700',
+                                            'dark:text-gray-300'); // Atur warna teks default ke TR
 
-                            // Hapus/ubah tampilan item notifikasi
-                            document.querySelectorAll('.notification-item.unread').forEach(item => {
-                                item.classList.remove('unread');
+                                        // --- Hapus SEMUA kelas yang menunjukkan status belum dibaca dari <a> ---
+                                        item.classList.remove('text-blue-800', 'dark:text-blue-200');
+
+                                        // --- Tambahkan kelas untuk status sudah dibaca ke <a> ---
+                                        item.classList.add('text-gray-700', 'dark:text-gray-300');
+
+                                        const newBadge = item.querySelector('.bg-blue-600');
+                                        if (newBadge) {
+                                            newBadge.remove(); // Hapus elemen badge
+                                        }
+                                    });
+
+                                    const countElement = document.getElementById('unread-notifications-count');
+                                    const responsiveCountElement = document.getElementById(
+                                        'responsive-unread-notifications-count');
+
+                                    if (countElement) {
+                                        countElement.textContent = '0';
+                                        countElement.classList.add('hidden');
+                                    }
+                                    if (responsiveCountElement) {
+                                        responsiveCountElement.textContent = '0';
+                                        responsiveCountElement.classList.add('hidden');
+                                    }
+
+                                    fetchUnreadNotificationsCount
+                                        (); // Panggil fungsi fetchUnreadNotificationsCount() untuk verifikasi akhir dari server
+
+                                    Swal.fire(
+                                        'Ditandai!',
+                                        'Semua notifikasi telah ditandai sudah dibaca.',
+                                        'success'
+                                    );
+                                } else {
+                                    Swal.fire(
+                                        'Gagal!',
+                                        data.message || 'Tidak dapat menandai semua notifikasi sudah dibaca.',
+                                        'error'
+                                    );
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error marking all as read:', error);
+                                Swal.fire(
+                                    'Gagal!',
+                                    'Terjadi kesalahan saat menandai notifikasi.',
+                                    'error'
+                                );
                             });
-
-                            alert(data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Gagal menandai semua notifikasi sebagai dibaca:', error);
-                    });
+                    }
+                });
             }
+
 
             function fetchUnreadNotificationsCount() {
                 fetch('{{ route('notifications.unreadCount') }}')
@@ -136,43 +208,21 @@
             setInterval(fetchUnreadNotificationsCount, 30000);
         </script>
     @endauth
-    @auth
-        <script>
-            document.querySelectorAll('.notification-item').forEach(item => {
-                if (!item.classList.contains('bg-gray-100')) { // Check if it's currently unread (not gray)
-                    item.addEventListener('click', function(event) {
-                        const notificationId = item.dataset.notificationId;
-                        if (notificationId) {
-                            fetch('{{ url('/notifications') }}/' + notificationId + '/read', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
-                                            .getAttribute('content')
-                                    }
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        // Update UI
-                                        item.classList.remove('bg-blue-100', 'dark:bg-blue-900',
-                                            'text-blue-800', 'dark:text-blue-200', 'border',
-                                            'border-blue-300', 'dark:border-blue-700');
-                                        item.classList.add('bg-gray-100', 'dark:bg-gray-700',
-                                            'text-gray-700', 'dark:text-gray-300');
-                                        item.querySelector('.bg-blue-600')?.classList.add(
-                                            'hidden'); // Sembunyikan label 'Baru'
-                                        fetchUnreadNotificationsCount
-                                            (); // Update the count in navbar (didefinisikan di app.blade.php)
-                                    }
-                                })
-                                .catch(error => console.error('Error marking notification as read:', error));
-                        }
-                    });
-                }
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.store('ui', {
+                sidebarOpen: false,
+
+                toggleSidebar() {
+                    this.sidebarOpen = !this.sidebarOpen;
+                },
+                closeSidebar() {
+                    this.sidebarOpen = false;
+                },
             });
-        </script>
-    @endauth
+        });
+    </script>
 
 </body>
 

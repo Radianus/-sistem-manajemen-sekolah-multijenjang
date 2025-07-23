@@ -1,24 +1,23 @@
-<header x-data="{ open: false }"
+<header
     class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 h-16 w-full flex items-center px-4 sm:px-6 lg:px-8
           fixed top-0 inset-x-0 z-40">
     <div class="flex justify-between w-full">
         <div class="flex items-center space-x-2">
+            <button @click="sidebarOpen = !sidebarOpen" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
             <div class="shrink-0 flex items-center pr-4 md:hidden">
                 <a href="{{ route('dashboard') }}">
                     <x-application-logo
                         class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200 transition-colors" />
                 </a>
             </div>
-            <button @click="sidebarOpen = !sidebarOpen" class="md:hidden focus:outline-none">
-                <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
             <span
                 class="transition-colors text-lg font-bold text-gray-900 dark:text-white">{{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}</span>
         </div>
-        <div x-data="{ sidebarOpen: false, darkMode: false }"class="flex items-center space-x-4">
+        <div class="flex items-center space-x-4">
             <div class="relative mr-4">
                 <a href="{{ route('notifications.index') }}"
                     class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 focus:outline-none focus:text-gray-700 dark:focus:text-gray-200 transition duration-150 ease-in-out">
@@ -33,14 +32,6 @@
                     </span>
                 </a>
             </div>
-            {{-- <button id="btnnotification" class="relative text-gray-600 dark:text-gray-200 hover:text-indigo-600">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-5-5.917V4a1 1 0 00-2 0v1.083A6 6 0 006 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 01-6 0v-1m6 0H9" />
-                </svg>
-                <span id="responsive-unread-notifications-count"
-                    class="absolute top-0 right-0 block h-2 w-2 rounded-full ring-2 ring-white dark:ring-gray-800 bg-red-600"></span>
-            </button> --}}
             <button @click="$store.theme.toggle()"
                 class="h-12 w-12 rounded-lg p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                 <svg class="fill-violet-700 block dark:hidden" fill="currentColor" viewBox="0 0 24 24">
@@ -52,22 +43,29 @@
                         fill-rule="evenodd" clip-rule="evenodd"></path>
                 </svg>
             </button>
-            <!-- User Dropdown -->
-
             <x-dropdown align="right" width="48">
                 <x-slot name="trigger">
                     <button
-                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
-                        {{-- avatar svg --}}
-                        <svg class="h-8 w-8 rounded-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path
-                                d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 2a6 6 0 110 12A6 6 0 0110 4zM7.5 9a1.5 1.5 0 11-3.001-.001A1.5 1.5 0 017.5 9zm5.5-1a1.5 1.5 0 11-3.001-.001A1.5 1.5 0 0113 8zM10.75 13a2.25 2.25 0 11-4.501-.001A2.25 2.25 0 0110.75 13z" />
-                        </svg>
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150 transition-colors">
+                        {{-- TAMPILKAN AVATAR DI SINI --}}
+                        @if (Auth::user()->avatar)
+                            <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                class="h-8 w-8 rounded-full object-cover mr-2">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF"
+                                alt="{{ Auth::user()->name }}" class="h-8 w-8 rounded-full object-cover mr-2">
+                        @endif
+                        {{-- AKHIR TAMPILKAN AVATAR --}}
+                        <div>{{ Auth::user()->name }}</div>
+                        <div class="ml-1">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
                     </button>
-
                 </x-slot>
-
                 <x-slot name="content">
                     <x-dropdown-link :href="route('profile.edit')">
                         {{ __('Profile') }}

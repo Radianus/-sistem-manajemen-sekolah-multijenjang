@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+  @media print {
+                /* Sembunyikan elemen-elemen navigasi dan kontrol di mode cetak */
+                nav, aside, .print\:hidden {
+                    display: none !important;
+                }
+                /* Pastikan konten utama memenuhi seluruh lebar halaman */
+                .print\:w-full {
+                    width: 100% !important;
+                }
+                .print\:ml-0 {
+                    margin-left: 0 !important;
+                }
+                .print\:pl-0 {
+                    padding-left: 0 !important;
+                }
+                .print\:mt-0 {
+                    margin-top: 0 !important;
+                }
+                .print\:py-0 {
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+                .print\:px-0 {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+                .print\:shadow-none {
+                    box-shadow: none !important;
+                }
+                .print\:rounded-none {
+                    border-radius: 0 !important;
+                }
+                .print\:border-0 {
+                    border-width: 0 !important;
+                }
+            }
 
 
 ::-webkit-scrollbar {
@@ -27,4 +63,8 @@
 
 .sidebar::-webkit-scrollbar {
   display: none;
+}
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
 }

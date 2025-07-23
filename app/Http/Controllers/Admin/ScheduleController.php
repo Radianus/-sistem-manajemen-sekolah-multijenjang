@@ -254,7 +254,16 @@ class ScheduleController extends Controller
         $schedule->delete();
         return redirect()->route('admin.schedules.index')->with('success', 'Jadwal pelajaran berhasil dihapus.');
     }
+    /**
+     * Display the specified schedule.
+     */
+    public function show(Schedule $schedule)
+    {
+        // Pastikan data relasi dimuat jika diperlukan di view
+        $schedule->load(['schoolClass', 'teachingAssignment.subject', 'teachingAssignment.teacher']);
 
+        return view('admin.schedules.show', compact('schedule'));
+    }
     /**
      * Helper method to get a list of academic years for dropdowns.
      */
