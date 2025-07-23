@@ -1,10 +1,3 @@
-Baik, "gass"\! Karena Anda ingin semua dokumentasi langsung di dalam `README.md`, saya akan menggabungkan semua konten yang telah kita buat sebelumnya ke dalam satu file `README.md` yang komprehensif.
-
-Ini akan menjadi file yang sangat panjang, tetapi akan berisi semua informasi yang Anda butuhkan di satu tempat.
-
------
-
-````markdown
 # Akademika: Sistem Manajemen Sekolah Multijenjang
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
