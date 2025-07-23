@@ -13,9 +13,33 @@
                         {{ $grade->student->user->name ?? 'N/A' }} (Mapel:
                         {{ $grade->teachingAssignment->subject->name ?? 'N/A' }})</h3>
 
-                    <form method="POST" action="{{ route('admin.grades.update', $grade) }}">
+                    <form method="POST" action="{{ route('admin.grades.update', $grade) }}" x-data="{
+                        allStudents: {{ Js::from($students) }},
+                        filteredStudents: [],
+                        searchTerm: '{{ old('student_search', $grade->student->user->name ?? '') }}', // Inisialisasi dengan nama siswa
+                        selectedStudentId: '{{ old('student_id', $grade->student_id) }}',
+                    
+                        init() {
+                            this.filterStudents();
+                        },
+                        filterStudents() {
+                            if (this.searchTerm.length > 0) {
+                                this.filteredStudents = this.allStudents.filter(student =>
+                                    (student.user.name && student.user.name.toLowerCase().includes(this.searchTerm.toLowerCase())) ||
+                                    (student.nis && student.nis.toLowerCase().includes(this.searchTerm.toLowerCase()))
+                                );
+                            } else {
+                                this.filteredStudents = this.allStudents;
+                            }
+                        },
+                        selectStudent(studentId, studentName) {
+                            this.selectedStudentId = studentId;
+                            this.searchTerm = studentName;
+                            this.$refs.studentResults.classList.add('hidden');
+                        }
+                    }">
                         @csrf
-                        @method('PUT') {{-- Penting: Gunakan method PUT untuk update --}}
+                        @method('PUT')
 
                         <div class="mb-4">
                             <x-input-label for="academic_year" :value="__('Tahun Ajaran')" />
@@ -47,25 +71,36 @@
                                     <option value="{{ $ta->id }}"
                                         {{ old('teaching_assignment_id', $grade->teaching_assignment_id) == $ta->id ? 'selected' : '' }}>
                                         {{ $ta->schoolClass->name ?? 'N/A' }} - {{ $ta->subject->name ?? 'N/A' }}
-                                        ({{ $ta->teacher->name ?? 'N/A' }})
+                                        (Guru: {{ $ta->teacher->name ?? 'N/A' }})
                                     </option>
                                 @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('teaching_assignment_id')" class="mt-2" />
                         </div>
 
-                        <div class="mb-4">
-                            <x-input-label for="student_id" :value="__('Siswa')" />
-                            <select id="student_id" name="student_id" required
-                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                <option value="">Pilih Siswa</option>
-                                @foreach ($students as $student)
-                                    <option value="{{ $student->id }}"
-                                        {{ old('student_id', $grade->student_id) == $student->id ? 'selected' : '' }}>
-                                        {{ $student->user->name ?? 'N/A' }} (NIS: {{ $student->nis }})</option>
-                                @endforeach
-                            </select>
+                        <div class="mb-4 relative">
+                            <x-input-label for="student_search" :value="__('Cari & Pilih Siswa')" />
+                            <x-text-input id="student_search" class="block mt-1 w-full" type="text"
+                                x-model="searchTerm" @input="filterStudents()"
+                                @focus="$refs.studentResults.classList.remove('hidden')"
+                                @click.away="$refs.studentResults.classList.add('hidden')"
+                                placeholder="Cari berdasarkan nama atau NIS..." />
+                            <input type="hidden" name="student_id" x-model="selectedStudentId" required />
                             <x-input-error :messages="$errors->get('student_id')" class="mt-2" />
+
+                            <div x-ref="studentResults"
+                                class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg hidden max-h-60 overflow-y-auto">
+                                <template x-for="student in filteredStudents" :key="student.id">
+                                    <div @click="selectStudent(student.id, student.user.name)"
+                                        class="px-4 py-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                                        <span x-text="`${student.user.name} (NIS: ${student.nis})`"></span>
+                                    </div>
+                                </template>
+                                <div x-show="filteredStudents.length === 0 && searchTerm.length > 0"
+                                    class="px-4 py-2 text-gray-500 dark:text-gray-400">Tidak ada siswa ditemukan.</div>
+                                <div x-show="allStudents.length === 0" class="px-4 py-2 text-red-600 dark:text-red-400">
+                                    Tidak ada siswa tersedia.</div>
+                            </div>
                         </div>
 
                         <div class="mb-4">
@@ -109,7 +144,8 @@
                         <div class="mb-6">
                             <x-input-label for="notes" :value="__('Catatan (Opsional)')" />
                             <textarea id="notes" name="notes"
-                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('notes', $grade->notes) }}</textarea>
+                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                rows="5">{{ old('notes', $grade->notes) }}</textarea>
                             <x-input-error :messages="$errors->get('notes')" class="mt-2" />
                         </div>
 

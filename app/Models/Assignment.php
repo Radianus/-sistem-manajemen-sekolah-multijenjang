@@ -12,17 +12,20 @@ class Assignment extends Model
 
     protected $fillable = [
         'title',
+        'assignment_type',
         'description',
         'teaching_assignment_id',
         'due_date',
         'max_score',
         'file_path',
         'assigned_by_user_id',
+        'is_graded_notification_sent'
     ];
 
     protected $casts = [
         'due_date' => 'datetime',
         'max_score' => 'decimal:2',
+        'is_graded_notification_sent' => 'boolean',
     ];
 
     /**
@@ -55,5 +58,15 @@ class Assignment extends Model
     public function isOverdue()
     {
         return $this->due_date && $this->due_date->isPast();
+    }
+
+    /**
+     * Cek apakah tugas masih bisa dikumpulkan.
+     *
+     * @return bool
+     */
+    public function canBeSubmitted()
+    {
+        return !$this->isOverdue();
     }
 }

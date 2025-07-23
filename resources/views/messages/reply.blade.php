@@ -24,19 +24,30 @@
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('messages.store') }}">
+                    <form method="POST" action="{{ route('messages.store') }}" enctype="multipart/form-data">
+                        {{-- TAMBAH INI --}}
                         @csrf
                         <input type="hidden" name="parent_message_id" value="{{ $message->id }}">
                         <input type="hidden" name="receiver_id"
                             value="{{ $message->sender_id === Auth::id() ? $message->receiver_id : $message->sender_id }}">
                         <input type="hidden" name="subject" value="Re: {{ $message->subject ?? '(Tanpa Subjek)' }}">
 
-                        <div class="mb-6">
+                        <div class="mb-4">
                             <x-input-label for="content" :value="__('Isi Balasan Anda')" />
                             <textarea id="content" name="content"
                                 class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                 rows="5" required>{{ old('content') }}</textarea>
                             <x-input-error :messages="$errors->get('content')" class="mt-2" />
+                        </div>
+
+                        <div class="mb-6">
+                            <x-input-label for="attachments" :value="__('Lampirkan File (Opsional)')" />
+                            <input type="file" name="attachments[]" id="attachments" multiple
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300 dark:hover:file:bg-blue-800" />
+                            <x-input-error :messages="$errors->get('attachments')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('attachments.*')" class="mt-2" />
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Ukuran maksimal 10MB per file.
+                                Format: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, JPEG, PNG, ZIP, RAR.</p>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

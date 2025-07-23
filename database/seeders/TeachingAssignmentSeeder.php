@@ -8,7 +8,7 @@ use App\Models\TeachingAssignment;
 use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\User;
-use Database\Factories\TeachingAssignmentFactory; // Import factory
+use Database\Factories\TeachingAssignmentFactory;
 
 class TeachingAssignmentSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class TeachingAssignmentSeeder extends Seeder
     {
         $classes = SchoolClass::all();
         $subjects = Subject::all();
-        $teachers = User::role('guru')->get();
+        $teachers = User::role('guru')->get(); // Ambil semua guru
 
         if ($classes->isEmpty() || $subjects->isEmpty() || $teachers->isEmpty()) {
             $this->command->info('Tidak cukup data kelas, mata pelajaran, atau guru untuk seed teaching assignments. Pastikan seeder sebelumnya sudah dijalankan.');
@@ -27,36 +27,36 @@ class TeachingAssignmentSeeder extends Seeder
         }
 
         $academicYear = '2025/2026';
-        $seededCount = 0;
 
-        // Coba buat kombinasi penugasan yang lebih banyak
-        foreach ($classes as $class) {
-            foreach ($subjects as $subject) {
-                // Ambil guru secara acak
-                $teacher = $teachers->random();
-                if ($teacher) {
-                    try {
-                        TeachingAssignment::firstOrCreate(
-                            [
-                                'school_class_id' => $class->id,
-                                'subject_id' => $subject->id,
-                                'teacher_id' => $teacher->id,
-                                'academic_year' => $academicYear,
-                            ],
-                            [] // Tidak perlu mengisi data karena firstOrCreate akan membuat jika tidak ada
-                        );
-                        $seededCount++;
-                    } catch (\Throwable $e) {
-                        // Handle unique constraint violation or other errors
-                        // $this->command->error('Error seeding TA: ' . $e->getMessage());
-                    }
-                }
-                // Batasi jumlah penugasan yang dibuat agar tidak terlalu banyak jika terlalu banyak kombinasi
-                if ($seededCount >= 50) { // Misalnya, batasi 50 penugasan
-                    break 2; // Keluar dari kedua loop
-                }
-            }
+        // Ambil guru spesifik kita (guru@akademika.com)
+        $guruSatu = User::where('email', 'guru@akademika.com')->first();
+        // Pastikan guruSatu ada, jika tidak, pakai guru acak
+        $targetTeacherId = $guruSatu ? $guruSatu->id : $teachers->random()->id;
+
+
+        // Buat penugasan spesifik untuk Guru Satu
+        // Contoh: Guru Satu mengajar Matematika di Kelas 10 IPA 1
+        $classTarget = $classes->where('name', 'Kelas 10 IPA 1')->first() ?? $classes->random();
+        $subjectTarget = $subjects->where('name', 'Matematika')->first() ?? $subjects->random();
+
+        if ($classTarget && $subjectTarget) {
+            TeachingAssignment::firstOrCreate(
+                [
+                    'school_class_id' => $classTarget->id,
+                    'subject_id' => $subjectTarget->id,
+                    'teacher_id' => $targetTeacherId, // Tugaskan ke Guru Satu
+                    'academic_year' => $academicYear,
+                ],
+                []
+            );
+            $this->command->info("Penugasan spesifik untuk guru@akademika.com (Matematika di {$classTarget->name}) dibuat.");
         }
-        $this->command->info('Teaching assignments seeded: ' . $seededCount);
+
+
+        // Buat penugasan lainnya menggunakan factory
+        // Pastikan ada cukup banyak penugasan acak lainnya
+        TeachingAssignment::factory()->count(30)->create(); // Buat 30 penugasan acak
+
+        $this->command->info('Teaching assignments seeded.');
     }
 }

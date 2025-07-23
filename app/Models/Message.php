@@ -53,7 +53,13 @@ class Message extends Model
     {
         return $this->hasMany(Message::class, 'parent_message_id');
     }
-
+    /**
+     * Get the attachments for the message.
+     */
+    public function attachments()
+    {
+        return $this->hasMany(MessageAttachment::class);
+    }
     /**
      * Scope a query to only include unread messages.
      */

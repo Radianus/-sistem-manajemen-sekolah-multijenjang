@@ -45,7 +45,6 @@
                 <form method="POST" action="{{ route('admin.submissions.update_grade', $submission) }}">
                     @csrf
                     @method('PUT')
-
                     <div class="mb-5">
                         <x-input-label for="score" :value="'Nilai (Skor Maks: ' . ($submission->assignment->max_score ?? 'N/A') . ')'" />
                         <x-text-input id="score" name="score" type="number" step="0.01" class="mt-1 w-full"

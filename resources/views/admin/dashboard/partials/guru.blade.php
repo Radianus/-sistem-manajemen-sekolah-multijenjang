@@ -31,9 +31,9 @@
                  ->orWhere('target_roles', 'like', '%guru%'); // Perbaiki ini
          })
          ->count();
-
      $currentAcademicYear = $globalSettings->current_academic_year ?? date('Y') . '/' . (date('Y') + 1);
  @endphp
+
  <div class="mt-8">
      <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
          👋 Hai, Guru! Ini ringkasan kamu — <span class="text-base font-medium text-gray-500">Tahun Ajaran

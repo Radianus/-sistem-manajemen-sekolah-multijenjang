@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Message;
+use App\Models\MessageAttachment;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class MessageController extends Controller
 {
@@ -40,11 +42,17 @@ class MessageController extends Controller
         if (auth()->id() === $message->receiver_id && is_null($message->read_at)) {
             $message->markAsRead();
         }
+        $message->load('attachments');
 
         $replies = $message->replies()->with(['sender', 'receiver'])->orderBy('created_at', 'asc')->get();
 
+        foreach ($replies as $reply) {
+            $reply->load('attachments');
+        }
+
         return view('messages.show', compact('message', 'replies'));
     }
+
 
     /**
      * Show the form for creating a new message.
@@ -61,30 +69,48 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'receiver_id' => ['required', 'exists:users,id', Rule::notIn([auth()->id()])], // Tidak bisa kirim ke diri sendiri
+            'receiver_id' => ['required', 'exists:users,id', Rule::notIn([auth()->id()])],
             'subject' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string'],
-            'parent_message_id' => ['nullable', 'exists:messages,id'], // Jika ini balasan
+            'parent_message_id' => ['nullable', 'exists:messages,id'],
+            'attachments.*' => ['nullable', 'file', 'max:10240', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,zip,rar'], // Max 10MB per file
         ]);
 
-        $message = Message::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $request->receiver_id,
-            'subject' => $request->subject,
-            'content' => $request->content,
-            'parent_message_id' => $request->parent_message_id,
-        ]);
-
-        $receiverUser = User::find($request->receiver_id);
-        if ($receiverUser) {
-            Notification::create([
-                'user_id' => $receiverUser->id,
-                'type' => 'new_message',
-                'title' => 'Pesan Baru Dari: ' . auth()->user()->name,
-                'message' => 'Anda menerima pesan baru dengan subjek: ' . ($message->subject ?? '(Tanpa Subjek)'),
-                'link' => route('messages.show', $message->id),
+        DB::transaction(function () use ($request) { // Gunakan transaksi untuk memastikan pesan dan lampiran tersimpan bersama
+            $message = Message::create([
+                'sender_id' => auth()->id(),
+                'receiver_id' => $request->receiver_id,
+                'subject' => $request->subject,
+                'content' => $request->content,
+                'parent_message_id' => $request->parent_message_id,
             ]);
-        }
+
+            // Tangani lampiran file
+            if ($request->hasFile('attachments')) {
+                foreach ($request->file('attachments') as $file) {
+                    $filePath = $file->store('public/message_attachments');
+                    MessageAttachment::create([
+                        'message_id' => $message->id,
+                        'file_path' => str_replace('public/', 'storage/', $filePath), // Simpan path publik
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_size' => $file->getSize(),
+                        'file_mime_type' => $file->getMimeType(),
+                    ]);
+                }
+            }
+
+            // Buat notifikasi untuk pesan baru (logika ini sudah ada)
+            $receiverUser = User::find($request->receiver_id);
+            if ($receiverUser) {
+                Notification::create([
+                    'user_id' => $receiverUser->id,
+                    'type' => 'new_message',
+                    'title' => 'Pesan Baru Dari: ' . auth()->user()->name,
+                    'message' => 'Anda menerima pesan baru dengan subjek: ' . ($message->subject ?? '(Tanpa Subjek)'),
+                    'link' => route('messages.show', $message->id),
+                ]);
+            }
+        });
 
         return redirect()->route('messages.index', ['tab' => 'sent'])->with('success', 'Pesan berhasil dikirim!');
     }

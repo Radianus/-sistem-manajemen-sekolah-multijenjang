@@ -69,15 +69,39 @@ class GradeController extends Controller
      */
     public function create()
     {
-        // Untuk form, kita perlu daftar penugasan mengajar yang valid
-        $teachingAssignments = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
+        // Ambil penugasan mengajar sesuai guru (sudah ada)
+        $teachingAssignmentsQuery = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
             ->orderBy('academic_year', 'desc')
-            ->get();
-        // Daftar siswa
-        $students = Student::with('user')->orderBy('nis')->get();
-        // Guru yang sedang login (untuk graded_by_teacher_id)
+            ->orderBy('subject_id');
+
+        if (auth()->user()->hasRole('guru')) {
+            $teachingAssignmentsQuery->where('teacher_id', auth()->id());
+        }
+        $teachingAssignments = $teachingAssignmentsQuery->get();
+
+        // Ambil siswa sesuai guru (sudah ada)
+        $studentsQuery = Student::with('user')
+            ->join('users', 'students.user_id', '=', 'users.id')
+            ->select('students.*')
+            ->orderBy('users.name');
+
+        if (auth()->user()->hasRole('guru')) {
+            $classesTaughtByTeacher = TeachingAssignment::where('teacher_id', auth()->id())
+                ->pluck('school_class_id')
+                ->unique()
+                ->toArray();
+            if (empty($classesTaughtByTeacher)) {
+                $studentsQuery->whereRaw('0=1');
+            } else {
+                $studentsQuery->whereIn('school_class_id', $classesTaughtByTeacher);
+            }
+        }
+
+        $students = $studentsQuery->get();
+
         $loggedInTeacher = auth()->user();
 
+        // Pastikan students dikirim sebagai JSON yang bisa dibaca Alpine.js
         return view('admin.grades.create', compact('teachingAssignments', 'students', 'loggedInTeacher'));
     }
 
@@ -149,12 +173,39 @@ class GradeController extends Controller
      */
     public function edit(Grade $grade)
     {
-        $teachingAssignments = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
+        // Ambil penugasan mengajar sesuai guru (sudah ada)
+        $teachingAssignmentsQuery = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
             ->orderBy('academic_year', 'desc')
-            ->get();
-        $students = Student::with('user')->orderBy('nis')->get();
+            ->orderBy('subject_id');
+
+        if (auth()->user()->hasRole('guru')) {
+            $teachingAssignmentsQuery->where('teacher_id', auth()->id());
+        }
+        $teachingAssignments = $teachingAssignmentsQuery->get();
+
+        // Ambil siswa sesuai guru (sudah ada)
+        $studentsQuery = Student::with('user')
+            ->join('users', 'students.user_id', '=', 'users.id')
+            ->select('students.*')
+            ->orderBy('users.name');
+
+        if (auth()->user()->hasRole('guru')) {
+            $classesTaughtByTeacher = TeachingAssignment::where('teacher_id', auth()->id())
+                ->pluck('school_class_id')
+                ->unique()
+                ->toArray();
+            if (empty($classesTaughtByTeacher)) {
+                $studentsQuery->whereRaw('0=1');
+            } else {
+                $studentsQuery->whereIn('school_class_id', $classesTaughtByTeacher);
+            }
+        }
+
+        $students = $studentsQuery->get();
+
         $loggedInTeacher = auth()->user();
 
+        // Pastikan students dikirim sebagai JSON yang bisa dibaca Alpine.js
         return view('admin.grades.edit', compact('grade', 'teachingAssignments', 'students', 'loggedInTeacher'));
     }
 

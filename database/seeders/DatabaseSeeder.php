@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ParentStudentSeeder::class);
         // Penugasan Mengajar membutuhkan kelas, mata pelajaran, dan guru (user).
         $this->call(TeachingAssignmentSeeder::class);
+        $this->call(AssignmentSeeder::class);
 
         // Nilai dan Absensi membutuhkan siswa dan penugasan mengajar.
         $this->call(GradeSeeder::class);
@@ -33,5 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingSeeder::class);
         $this->call(MessageSeeder::class);
         $this->call(NotificationSeeder::class);
+        $this->call(MessageAttachmentSeeder::class);
     }
 }

@@ -23,6 +23,22 @@
                                 :value="old('title', $assignment->title)" required autofocus />
                             <x-input-error :messages="$errors->get('title')" class="mt-2" />
                         </div>
+                        <div class="mb-4">
+                            <x-input-label for="assignment_type" :value="__('Tipe Tugas')" />
+                            <select id="assignment_type" name="assignment_type" required
+                                class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                @php
+                                    $assignmentTypes = ['Individu', 'Kelompok', 'Proyek', 'Presentasi', 'Quiz'];
+                                @endphp
+                                <option value="">Pilih Tipe Tugas</option>
+                                @foreach ($assignmentTypes as $type)
+                                    <option value="{{ $type }}"
+                                        {{ old('assignment_type', $assignment->assignment_type) == $type ? 'selected' : '' }}>
+                                        {{ $type }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('assignment_type')" class="mt-2" />
+                        </div>
 
                         <div class="mb-4">
                             <x-input-label for="description" :value="__('Deskripsi')" />
@@ -40,7 +56,8 @@
                                 @foreach ($teachingAssignments as $ta)
                                     <option value="{{ $ta->id }}"
                                         {{ old('teaching_assignment_id', $assignment->teaching_assignment_id) == $ta->id ? 'selected' : '' }}>
-                                        {{ $ta->schoolClass->name ?? 'N/A' }} - {{ $ta->subject->name ?? 'N/A' }} (Guru:
+                                        {{ $ta->schoolClass->name ?? 'N/A' }} - {{ $ta->subject->name ?? 'N/A' }}
+                                        (Guru:
                                         {{ $ta->teacher->name ?? 'N/A' }})
                                     </option>
                                 @endforeach

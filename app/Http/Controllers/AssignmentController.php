@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Assignment;
+use App\Models\Notification;
 use App\Models\Submission;
 use App\Models\TeachingAssignment;
 use App\Models\SchoolClass;
@@ -11,10 +12,14 @@ use App\Models\User;
 use App\Models\Student;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage; // Untuk upload file
 
 class AssignmentController extends Controller
 {
+    /**
+     * Display a listing of the assignments.
+     */
     /**
      * Display a listing of the assignments.
      */
@@ -23,19 +28,17 @@ class AssignmentController extends Controller
         $assignments = Assignment::with(['teachingAssignment.schoolClass', 'teachingAssignment.subject', 'teachingAssignment.teacher', 'assignedBy'])
             ->orderBy('due_date', 'desc');
 
-        // Batasi akses berdasarkan peran
+        // --- BATASI AKSES BERDASARKAN PERAN (Scoping Data Utama) ---
         if (auth()->user()->hasRole('guru')) {
-            $assignments->where('assigned_by_user_id', auth()->id()) // Hanya tugas yang diberikan guru ini
-                ->orWhereHas('teachingAssignment', function ($query) { // Atau tugas yang terkait dengan TA guru ini
-                    $query->where('teacher_id', auth()->id());
-                });
+            $assignments->whereHas('teachingAssignment', function ($query) {
+                $query->where('teacher_id', auth()->id());
+            });
         } elseif (auth()->user()->hasRole('siswa') && auth()->user()->student) {
             $studentId = auth()->user()->student->id;
             $classId = auth()->user()->student->school_class_id;
             $assignments->whereHas('teachingAssignment', function ($query) use ($classId) {
-                $query->where('school_class_id', $classId); // Hanya tugas untuk kelas siswa ini
+                $query->where('school_class_id', $classId);
             });
-            // Siswa juga bisa melihat status submission mereka
             $assignments->withExists('submissions', function ($query) use ($studentId) {
                 $query->where('student_id', $studentId);
             });
@@ -46,15 +49,47 @@ class AssignmentController extends Controller
             });
         }
 
-        // Filters (can be expanded)
-        if ($request->has('class_id') && auth()->user()->hasRole('admin_sekolah')) {
-            $assignments->whereHas('teachingAssignment', function ($q) use ($request) {
-                $q->where('school_class_id', $request->input('class_id'));
-            });
+        // --- FILTER TAMBAHAN DARI INPUT (dropdown filter) ---
+        $filterClassId = $request->input('class_id');
+        if ($filterClassId) { // Hanya terapkan filter jika class_id dikirimkan
+            // Admin: bisa filter semua kelas
+            if (auth()->user()->hasRole('admin_sekolah')) {
+                $assignments->whereHas('teachingAssignment', function ($q) use ($filterClassId) {
+                    $q->where('school_class_id', $filterClassId);
+                });
+            }
+            // Guru: hanya bisa filter kelas yang mereka ajar
+            elseif (auth()->user()->hasRole('guru')) {
+                $classesTaughtByTeacher = TeachingAssignment::where('teacher_id', auth()->id())
+                    ->pluck('school_class_id')->unique()->toArray();
+
+                if (in_array($filterClassId, $classesTaughtByTeacher)) { // Pastikan kelas yang difilter adalah kelas yang diajar guru
+                    $assignments->whereHas('teachingAssignment', function ($q) use ($filterClassId) {
+                        $q->where('school_class_id', $filterClassId);
+                    });
+                } else {
+                    // Jika guru mencoba filter dengan kelas yang tidak diajar, tidak tampilkan apapun
+                    $assignments->whereRaw('0=1');
+                }
+            }
+            // Siswa/Orang Tua: Filter tambahan class_id tidak berlaku karena mereka sudah sangat terbatas oleh scoping utama
         }
 
         $assignments = $assignments->paginate(10);
-        $classes = SchoolClass::orderBy('name')->get(); // For filter dropdown
+
+        // --- PENGAMBILAN DATA KELAS UNTUK DROPDOWN FILTER DI VIEW ---
+        $classes = SchoolClass::orderBy('name')->get();
+
+        // Jika user adalah guru, filter dropdown kelas hanya untuk kelas yang dia ajarkan
+        if (auth()->user()->hasRole('guru')) {
+            $classesTaughtByTeacher = TeachingAssignment::where('teacher_id', auth()->id())
+                ->pluck('school_class_id')->unique()->toArray();
+            // Filter Collection $classes berdasarkan ID kelas yang diajarkan guru
+            $classes = $classes->whereIn('id', $classesTaughtByTeacher);
+        }
+        // Untuk Siswa dan Orang Tua, dropdown filter kelas tidak perlu ditampilkan atau hanya tampilkan kelas mereka
+        // Ini akan dihandle di view assignments/index.blade.php
+        // -----------------------------------------------------------
 
         return view('admin.assignments.index', compact('assignments', 'classes'));
     }
@@ -64,16 +99,25 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        // Hanya Admin dan Guru yang bisa membuat tugas
         abort_if(!auth()->user()->hasRole('admin_sekolah') && !auth()->user()->hasRole('guru'), 403);
 
-        $teachingAssignments = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
+        $teachingAssignmentsQuery = TeachingAssignment::with(['schoolClass', 'subject', 'teacher'])
             ->orderBy('academic_year', 'desc')
-            ->get();
-        $academicYears = $this->getAcademicYears(); // Helper dari ScheduleController, bisa dipindah ke AppServiceProvider
+            ->orderBy('school_class_id')
+            ->orderBy('subject_id');
 
-        return view('admin.assignments.create', compact('teachingAssignments', 'academicYears'));
+        // Jika user adalah guru, filter berdasarkan teacher_id mereka
+        if (auth()->user()->hasRole('guru')) {
+            $teachingAssignmentsQuery->where('teacher_id', auth()->id());
+        }
+        // Admin akan melihat semua karena tidak ada filter tambahan di sini
+
+        $teachingAssignments = $teachingAssignmentsQuery->get();
+        // ---------------------------
+
+        return view('admin.assignments.create', compact('teachingAssignments'));
     }
+
 
     /**
      * Store a newly created assignment in storage.
@@ -84,6 +128,7 @@ class AssignmentController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'assignment_type' => ['required', 'string', Rule::in(['Individu', 'Kelompok', 'Proyek', 'Presentasi', 'Quiz'])], // <-- TAMBAHKAN VALIDASI INI
             'description' => ['nullable', 'string'],
             'teaching_assignment_id' => [
                 'required',
@@ -108,6 +153,7 @@ class AssignmentController extends Controller
 
         Assignment::create([
             'title' => $request->title,
+            'assignment_type' => $request->assignment_type,
             'description' => $request->description,
             'teaching_assignment_id' => $request->teaching_assignment_id,
             'due_date' => $request->due_date,
@@ -137,8 +183,6 @@ class AssignmentController extends Controller
             $submission = $assignment->submissions()->where('student_id', $user->student->id)->first();
             return view('admin.assignments.show_student', compact('assignment', 'submission'));
         }
-
-        // Default: 403 Forbidden
         abort(403, 'Akses Ditolak. Anda tidak memiliki izin untuk melihat tugas ini.');
     }
 
@@ -167,6 +211,8 @@ class AssignmentController extends Controller
 
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
+            'assignment_type' => ['required', 'string', Rule::in(['Individu', 'Kelompok', 'Proyek', 'Presentasi', 'Quiz'])], // <-- TAMBAHKAN VALIDASI INI
+
             'description' => ['nullable', 'string'],
             'teaching_assignment_id' => [
                 'required',
@@ -200,6 +246,8 @@ class AssignmentController extends Controller
 
         $assignment->update([
             'title' => $request->title,
+            'assignment_type' => $request->assignment_type,
+
             'description' => $request->description,
             'teaching_assignment_id' => $request->teaching_assignment_id,
             'due_date' => $request->due_date,
@@ -305,7 +353,21 @@ class AssignmentController extends Controller
             'feedback' => $request->feedback,
             'graded_by_user_id' => auth()->id(),
         ]);
+        $assignment = $submission->assignment;
+        $remainingUngradedSubmissions = Submission::where('assignment_id', $assignment->id)
+            ->whereNotNull('submission_date')
+            ->whereNull('score')
+            ->count();
+        if ($remainingUngradedSubmissions === 0) {
+            $assignment->is_graded_notification_sent = true;
+            $assignment->save();
 
+            // Hapus notifikasi 'ungraded_submission' yang terkait dengan tugas ini untuk guru pengajar
+            Notification::where('user_id', $assignment->teachingAssignment->teacher_id)
+                ->where('type', 'ungraded_submission')
+                ->where('related_id', $assignment->id)
+                ->delete();
+        }
         return redirect()->route('admin.assignments.show', $submission->assignment->id)->with('success', 'Nilai tugas berhasil disimpan.');
     }
 

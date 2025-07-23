@@ -42,6 +42,25 @@
                         {!! nl2br(e($message->content)) !!}
                     </div>
 
+                    {{-- TAMPILKAN LAMPIRAN FILE --}}
+                    @if ($message->attachments->isNotEmpty())
+                        <div
+                            class="mt-4 p-4 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700">
+                            <h4 class="font-semibold text-lg text-gray-900 dark:text-gray-100 mb-2">Lampiran File:</h4>
+                            <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                                @foreach ($message->attachments as $attachment)
+                                    <li>
+                                        <a href="{{ Storage::url($attachment->file_path) }}" target="_blank"
+                                            class="text-blue-500 hover:underline">
+                                            {{ $attachment->file_name }}
+                                            ({{ number_format($attachment->file_size / 1024, 2) }} KB)
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <div class="flex items-center justify-end mt-6 space-x-3">
                         <a href="{{ route('messages.index', ['tab' => 'inbox']) }}"
                             class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
@@ -68,6 +87,23 @@
                                     <div class="prose dark:prose-invert max-w-none text-gray-800 dark:text-gray-200">
                                         {!! nl2br(e($reply->content)) !!}
                                     </div>
+                                    @if ($reply->attachments->isNotEmpty())
+                                        <div class="mt-2 text-left">
+                                            <h5 class="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-1">
+                                                Lampiran Balasan:</h5>
+                                            <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
+                                                @foreach ($reply->attachments as $attachment)
+                                                    <li>
+                                                        <a href="{{ Storage::url($attachment->file_path) }}"
+                                                            target="_blank" class="text-blue-500 hover:underline">
+                                                            {{ $attachment->file_name }}
+                                                            ({{ number_format($attachment->file_size / 1024, 2) }} KB)
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </div>
                             @endforeach
                         </div>

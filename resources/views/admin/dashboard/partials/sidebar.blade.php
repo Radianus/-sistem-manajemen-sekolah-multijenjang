@@ -45,31 +45,6 @@
             </svg>
             {{ __('Dashboard') }}
         </x-nav-link>
-        @role('guru')
-            <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
-                Laporan
-            </div>
-            <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
-                request()->routeIs('admin.reports.generateReportCard')">
-                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                    </path>
-                </svg>
-                {{ __('Cetak Rapor Siswa') }}
-            </x-nav-link>
-            <x-nav-link :href="route('admin.reports.gradeSummaryFilterForm')" :active="request()->routeIs('admin.reports.gradeSummaryFilterForm') ||
-                request()->routeIs('admin.reports.generateGradeSummary')">
-                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                    </path>
-                </svg>
-                {{ __('Ringkasan Nilai') }}
-            </x-nav-link>
-        @endrole
         @role('admin_sekolah')
             <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
                 Laporan
@@ -205,6 +180,15 @@
                             </path>
                         </svg>
                         {{ __('Pengaturan Sistem') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
+                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6.253v13.435m0-13.435a4.487 4.487 0 00-4.487 4.487v2.091M12 6.253a4.487 4.487 0 014.487 4.487v2.091m-7.436 0l.92-3.447A2.246 2.246 0 0116.518 10h1.968a2.246 2.246 0 012.235 2.09l-.754 2.822m-7.436 0l-.92 3.447A2.246 2.246 0 007.482 10H5.514a2.246 2.246 0 00-2.235 2.09l.754 2.822m13.774 0H7.236">
+                            </path>
+                        </svg>
+                        {{ __('Materi & Tugas') }}
                     </x-nav-link>
                 </div>
             @endrole
