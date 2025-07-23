@@ -317,7 +317,7 @@ Berikut adalah beberapa relasi kunci antar model:
 
 ## Hubungi Kami
 
-* **Ranus di Facebook:** Ranus Ate
+* **Ranus di Facebook:**  https://web.facebook.com/nanu.ranusate
 
 ## Lisensi
 
