@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\Schedule;
 use App\Models\SchoolClass;
 use App\Models\TeachingAssignment;
+use App\Models\User;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class ScheduleController extends Controller
 {
+    /**
+     * Display a listing of the schedules.
+     */
     /**
      * Display a listing of the schedules.
      */
@@ -33,26 +37,87 @@ class ScheduleController extends Controller
             ->select('schedules.*')
             ->orderBy('classes.name');
 
-        // --- BATASI DATA UNTUK GURU ---
+        // --- BATASI DATA UNTUK GURU YANG LOGIN ---
         if (auth()->user()->hasRole('guru')) {
             $schedules->whereHas('teachingAssignment', function ($query) {
                 $query->where('teacher_id', auth()->id());
             });
         }
-        // --- BATASI DATA UNTUK SISWA ---
+        // --- BATASI DATA UNTUK SISWA YANG LOGIN ---
         if (auth()->user()->hasRole('siswa') && auth()->user()->student) {
             $schedules->where('schedules.school_class_id', auth()->user()->student->school_class_id);
         }
-        // --- FILTER BERDASARKAN KELAS DARI PARAMETER URL (MISAL DARI DASHBOARD ADMIN) ---
-        if ($request->has('class_id') && (auth()->user()->hasRole('admin_sekolah') || auth()->user()->hasRole('guru'))) {
-            $schedules->where('schedules.school_class_id', $request->input('class_id'));
+        // --- BATASI DATA UNTUK ORANG TUA YANG LOGIN ---
+        if (auth()->user()->hasRole('orang_tua') && auth()->user()->children->isNotEmpty()) {
+            $childClassIds = auth()->user()->children->pluck('school_class_id')->unique()->toArray();
+            $schedules->whereIn('schedules.school_class_id', $childClassIds);
         }
 
-        $schedules = $schedules->paginate(10);
-        $classes = SchoolClass::orderBy('name')->get();
 
-        return view('admin.schedules.index', compact('schedules', 'classes', 'academicYear'));
+        // --- FILTER TAMBAHAN DARI INPUT (dropdown filter) ---
+        $filterClassId = $request->input('class_id');
+        if ($filterClassId) {
+            if (auth()->user()->hasRole('admin_sekolah') || auth()->user()->hasRole('guru') || auth()->user()->hasRole('orang_tua')) {
+                $schedules->where('schedules.school_class_id', $filterClassId);
+            }
+        }
+
+        // --- FILTER BERDASARKAN GURU DARI PARAMETER URL (sudah ada) ---
+        $filterTeacherId = $request->input('teacher_id');
+        if ($filterTeacherId) {
+            if (auth()->user()->hasRole('admin_sekolah')) {
+                $schedules->whereHas('teachingAssignment', function ($q) use ($filterTeacherId) {
+                    $q->where('teacher_id', $filterTeacherId);
+                });
+            } elseif (auth()->user()->hasRole('guru') && auth()->id() == $filterTeacherId) {
+                $schedules->whereHas('teachingAssignment', function ($q) use ($filterTeacherId) {
+                    $q->where('teacher_id', $filterTeacherId);
+                });
+            } else {
+                $schedules->whereRaw('0=1');
+            }
+        }
+
+        // --- FILTER BERDASARKAN JENJANG (level) DARI PARAMETER URL ---
+        $filterLevel = $request->input('level');
+        if ($filterLevel) {
+            if (auth()->user()->hasRole('admin_sekolah')) {
+                $schedules->whereHas('schoolClass', function ($q) use ($filterLevel) {
+                    $q->where('level', $filterLevel);
+                });
+            } else { // Jika guru/siswa/orang tua mencoba filter jenjang yang bukan admin
+                // Data mereka sudah dibatasi oleh scoping utama, filter ini tidak relevan
+                // atau hanya boleh memfilter jenjang yang relevan bagi mereka
+                // Untuk kesederhanaan, biarkan admin saja yang bisa filter jenjang secara global
+                $schedules->whereRaw('0=1'); // Tidak tampilkan apapun jika bukan admin
+            }
+        }
+        // ------------------------------------------------------------
+
+        $schedules = $schedules->paginate(10);
+
+        // --- PENGAMBILAN DATA UNTUK DROPDOWN FILTER DI VIEW ---
+        // Kelas untuk dropdown filter
+        $classes = SchoolClass::orderBy('name')->get();
+        if (auth()->user()->hasRole('guru')) {
+            $classesTaughtByTeacher = TeachingAssignment::where('teacher_id', auth()->id())
+                ->pluck('school_class_id')->unique()->toArray();
+            $classes = $classes->whereIn('id', $classesTaughtByTeacher);
+        }
+
+        // Guru untuk dropdown filter (hanya jika Admin)
+        $teachers = collect([]);
+        if (auth()->user()->hasRole('admin_sekolah')) {
+            $teachers = User::role('guru')->orderBy('name')->get();
+        }
+
+        // Opsi Jenjang untuk dropdown filter
+        $levelOptions = ['SD', 'SMP', 'SMA', 'SMK'];
+        // ----------------------------------------------------
+
+        return view('admin.schedules.index', compact('schedules', 'classes', 'academicYear', 'teachers', 'levelOptions'));
     }
+
     /**
      * Show the form for creating a new schedule entry.
      */
@@ -64,8 +129,6 @@ class ScheduleController extends Controller
             ->orderBy('academic_year', 'desc')
             // ->orderBy('schoolClass.name') // Pastikan baris ini sudah dikoreksi/dihapus sesuai diskusi sebelumnya
             ->get();
-
-
         $academicYears = $this->getAcademicYears();
         return view('admin.schedules.create', compact('classes', 'teachingAssignments', 'academicYears'));
     }

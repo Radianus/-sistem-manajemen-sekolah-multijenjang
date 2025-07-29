@@ -25,17 +25,14 @@
 
                         <div class="mb-4">
                             <x-input-label for="level" :value="__('Jenjang Pendidikan')" />
-                            <select id="level" name="level"
+                            <select id="level" name="level" required
                                 class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                                 <option value="">Pilih Jenjang</option>
-                                <option value="SD" {{ old('level', $class->level) == 'SD' ? 'selected' : '' }}>SD
-                                </option>
-                                <option value="SMP" {{ old('level', $class->level) == 'SMP' ? 'selected' : '' }}>SMP
-                                </option>
-                                <option value="SMA" {{ old('level', $class->level) == 'SMA' ? 'selected' : '' }}>SMA
-                                </option>
-                                <option value="SMK" {{ old('level', $class->level) == 'SMK' ? 'selected' : '' }}>SMK
-                                </option>
+                                @foreach ($levelOptions as $level)
+                                    <option value="{{ $level }}"
+                                        {{ old('level', $class->level) == $level ? 'selected' : '' }}>
+                                        {{ $level }}</option>
+                                @endforeach
                             </select>
                             <x-input-error :messages="$errors->get('level')" class="mt-2" />
                         </div>

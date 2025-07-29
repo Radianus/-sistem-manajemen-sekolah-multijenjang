@@ -1,44 +1,86 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+            /* ... (existing x-cloak style) ... */
 
-  @media print {
-                /* Sembunyikan elemen-elemen navigasi dan kontrol di mode cetak */
-                nav, aside, .print\:hidden {
+            /* Global print styles */
+            @media print {
+                /* Sembunyikan Navbar Utama secara spesifik */
+                #main-navbar {
                     display: none !important;
                 }
+                /* Sembunyikan Sidebar */
+                #sidebar {
+                    display: none !important;
+                }
+                /* Sembunyikan Sidebar */
+                #close-sidebar {
+                    display: none !important;
+                }
+                /* Sembunyikan Sidebar */
+                #over {
+                    display: none !important;
+                }
+                /* Sembunyikan elemen dengan class print:hidden */
+                .print\:hidden {
+                    display: none !important;
+                }
+                
                 /* Pastikan konten utama memenuhi seluruh lebar halaman */
-                .print\:w-full {
+                body > div { /* Target the main wrapper div */
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    width: 100% !important;
+                    min-height: auto !important;
+                }
+                 nav, aside, .print\:hidden { /* Nav di sini mungkin tidak cukup spesifik */
+            display: none !important;
+        }
+                main {
+                    margin-left: 0 !important;
+                    padding-top: 0 !important;
                     width: 100% !important;
                 }
-                .print\:ml-0 {
-                    margin-left: 0 !important;
+
+                /* Pastikan warna teks terlihat di latar belakang putih kertas */
+                body, html {
+                    background-color: #fff !important;
+                    color: #000 !important;
                 }
-                .print\:pl-0 {
-                    padding-left: 0 !important;
+                .dark\:text-gray-100, .dark\:text-gray-200, .dark\:text-gray-300, .dark\:text-gray-400 { /* Override dark mode text color for print */
+                    color: #000 !important;
                 }
-                .print\:mt-0 {
-                    margin-top: 0 !important;
+                .dark\:bg-gray-800, .dark\:bg-gray-900 { /* Override dark mode background color for print */
+                    background-color: #fff !important;
                 }
-                .print\:py-0 {
+                .border-gray-200, .dark\:border-gray-700, .dark\:border-gray-800, .border-gray-300 {
+                    border-color: #ccc !important; /* Ensure borders are visible */
+                }
+                /* Remove shadows and rounded corners for print */
+                .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl, .rounded-lg, .rounded-md, .rounded-full {
+                    box-shadow: none !important;
+                    border-radius: 0 !important;
+                }
+                /* Force tables and content to be visible and clean */
+                table, th, td, p, h1, h2, h3, h4, span, div {
+                    background-color: transparent !important;
+                    box-shadow: none !important;
+                    text-shadow: none !important;
+                }
+                .bg-gray-50, .bg-white, .bg-gray-100 { /* Specific background colors */
+                    background-color: #fff !important;
+                }
+
+                /* Adjust specific spacing for print */
+                .py-12 {
                     padding-top: 0 !important;
                     padding-bottom: 0 !important;
                 }
-                .print\:px-0 {
-                    padding-left: 0 !important;
-                    padding-right: 0 !important;
-                }
-                .print\:shadow-none {
-                    box-shadow: none !important;
-                }
-                .print\:rounded-none {
-                    border-radius: 0 !important;
-                }
-                .print\:border-0 {
-                    border-width: 0 !important;
+                .mb-8, .mb-6, .mb-4, .mt-8, .mt-6, .mt-4 {
+                    margin-bottom: 0 !important;
+                    margin-top: 0 !important;
                 }
             }
-
 
 ::-webkit-scrollbar {
   width: 6px;

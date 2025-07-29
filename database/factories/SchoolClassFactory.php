@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\SchoolClass;
 use App\Models\User;
+use Carbon\Carbon;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\SchoolClass>
@@ -39,14 +40,11 @@ class SchoolClassFactory extends Factory
                 break;
         }
 
-        // --- PERBAIKI BAGIAN INI ---
-        // Tambahkan angka unik untuk memastikan nama kelas tidak duplikat
         $className = 'Kelas ' . $gradeLevel . ' ' . $level . ' ' . fake()->unique()->randomNumber(3);
-        // ---------------------------
 
         return [
             'name' => $className,
-            'level' => $level,
+            'level' => $level, // <-- PASTIKAN INI ADALAH 'level'
             'grade_level' => (string) $gradeLevel,
             'academic_year' => '2025/2026',
             // homeroom_teacher_id akan diisi di seeder

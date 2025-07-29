@@ -24,17 +24,14 @@ class ClassController extends Controller
         return view('admin.classes.index', compact('classes'));
     }
 
-    /**
-     * Show the form for creating a new class.
-     */
     public function create()
     {
-        // Ambil semua guru untuk pilihan wali kelas
-        // Pastikan user dengan peran 'guru' sudah ada di database (dari seeder)
-        $teachers = User::role('guru')->orderBy('name')->get();
-        return view('admin.classes.create', compact('teachers'));
-    }
+        abort_if(!auth()->user()->hasRole('admin_sekolah'), 403);
 
+        $teachers = User::role('guru')->orderBy('name')->get();
+        $levelOptions = ['SD', 'SMP', 'SMA', 'SMK']; // <-- UBAH INI
+        return view('admin.classes.create', compact('teachers', 'levelOptions'));
+    }
     /**
      * Store a newly created class in storage.
      */
@@ -58,21 +55,27 @@ class ClassController extends Controller
      */
     public function edit(SchoolClass $class)
     {
+        abort_if(!auth()->user()->hasRole('admin_sekolah'), 403);
+
         $teachers = User::role('guru')->orderBy('name')->get();
-        return view('admin.classes.edit', compact('class', 'teachers'));
+        $levelOptions = ['SD', 'SMP', 'SMA', 'SMK']; // <-- UBAH INI
+        return view('admin.classes.edit', compact('class', 'teachers', 'levelOptions'));
     }
 
-    /**
-     * Update the specified class in storage.
-     */
     public function update(Request $request, SchoolClass $class)
     {
+        abort_if(!auth()->user()->hasRole('admin_sekolah'), 403);
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('classes')->ignore($class->id)],
-            'level' => ['nullable', 'string', 'max:255'],
-            'grade_level' => ['nullable', 'string', 'max:255'],
-            'academic_year' => ['nullable', 'string', 'max:255'],
-            'homeroom_teacher_id' => ['nullable', 'exists:users,id'],
+            'level' => ['nullable', 'string', Rule::in(['SD', 'SMP', 'SMA', 'SMK'])], // <-- UBAH INI
+            'homeroom_teacher_id' => ['nullable', Rule::exists('users', 'id')->where(function ($query) {
+                $query->whereHas('roles', function ($q) {
+                    $q->where('name', 'guru');
+                });
+            })],
+            'academic_year' => ['required', 'string', 'max:255'],
+            'grade_level' => ['required', 'string', 'max:10'],
         ]);
 
         $class->update($request->all());

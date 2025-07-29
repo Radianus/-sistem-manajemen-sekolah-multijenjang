@@ -21,18 +21,21 @@
                             <x-input-error :messages="$errors->get('name')" class="mt-2" />
                         </div>
 
+
                         <div class="mb-4">
-                            <x-input-label for="level" :value="__('Jenjang Pendidikan')" />
-                            <select id="level" name="level"
+                            <x-input-label for="level" :value="__('Jenjang Pendidikan')" /> {{-- UBAH LABEL --}}
+                            <select id="level" name="level" required
                                 class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                                 <option value="">Pilih Jenjang</option>
-                                <option value="SD" {{ old('level') == 'SD' ? 'selected' : '' }}>SD</option>
-                                <option value="SMP" {{ old('level') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                <option value="SMA" {{ old('level') == 'SMA' ? 'selected' : '' }}>SMA</option>
-                                <option value="SMK" {{ old('level') == 'SMK' ? 'selected' : '' }}>SMK</option>
+                                @foreach ($levelOptions as $level)
+                                    {{-- UBAH VARIABEL --}}
+                                    <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>
+                                        {{ $level }}</option> {{-- UBAH VALUE --}}
+                                @endforeach
                             </select>
-                            <x-input-error :messages="$errors->get('level')" class="mt-2" />
+                            <x-input-error :messages="$errors->get('level')" class="mt-2" /> {{-- UBAH ERROR --}}
                         </div>
+
 
                         <div class="mb-4">
                             <x-input-label for="grade_level" :value="__('Tingkat Kelas')" />

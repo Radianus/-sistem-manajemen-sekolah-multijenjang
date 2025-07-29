@@ -28,6 +28,7 @@
             display: none !important;
         }
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 
 </head>
 
@@ -37,9 +38,10 @@
     @include('admin.dashboard.partials.sidebar')
 
     {{-- Main Content --}}
-    <main class="lg:ml-64 p-4 mt-4">
+    <main class="lg:ml-64 p-4 mt-4" id="">
         {{ $slot }}
     </main>
+
     <script>
         function mainApp() {
             return {
@@ -211,6 +213,10 @@
 
     <script>
         document.addEventListener('alpine:init', () => {
+            new TomSelect('#school_class_id', {
+                placeholder: 'Cari kelas...',
+                allowEmptyOption: true,
+            });
             Alpine.store('ui', {
                 sidebarOpen: false,
 
@@ -223,7 +229,7 @@
             });
         });
     </script>
-
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 </body>
 
 </html>

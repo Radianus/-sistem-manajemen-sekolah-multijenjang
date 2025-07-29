@@ -51,16 +51,18 @@
 
                             <div class="mb-4">
                                 <x-input-label for="school_class_id" :value="__('Kelas')" />
-                                <select id="school_class_id" name="school_class_id" required x-model="selectedClassId"
-                                    @change="filterTeachingAssignments()" {{-- Bind to Alpine data and trigger filter --}}
-                                    class="block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                <select id="school_class_id" name="school_class_id" x-model="selectedClassId"
+                                    @change="filterTeachingAssignments()"
+                                    class="tom-select block mt-1 w-full border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
                                     <option value="">Pilih Kelas</option>
                                     @foreach ($classes as $class)
                                         <option value="{{ $class->id }}"
-                                            {{ old('school_class_id') == $class->id ? 'selected' : '' }}>{{ $class->name }}
+                                            {{ old('school_class_id') == $class->id ? 'selected' : '' }}>
+                                            {{ $class->name }}
                                         </option>
                                     @endforeach
                                 </select>
+
                                 <x-input-error :messages="$errors->get('school_class_id')" class="mt-2" />
                                 @if ($classes->isEmpty())
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400">Tidak ada kelas ditemukan. Harap

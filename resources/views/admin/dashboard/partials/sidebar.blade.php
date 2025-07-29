@@ -1,8 +1,8 @@
 <div class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" x-show="sidebarOpen" @click="sidebarOpen = false"
-    x-transition></div>
+    x-transition id="over"></div>
 <!-- Overlay -->
 <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity lg:hidden" x-show="sidebarOpen" x-transition.opacity
-    @click="closeSidebar"></div>
+    @click="closeSidebar" id="close-sidebar"></div>
 <aside :class="{ '-translate-x-full': !sidebarOpen }" x-show="sidebarOpen || window.innerWidth >= 1024" x-transition
     x-show="sidebarOpen || window.innerWidth >= 1024" @click.outside="closeSidebar"
     class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-xl
@@ -20,7 +20,7 @@
             </svg>
         </button>
     </div>
-    <nav class="mt-2 space-y-2 px-4 ">
+    <nav class="mt-2 space-y-2 px-4 " id="sidebar">
         <p class="text-sm font-medium text-gray-500 dark:text-gray-400 px-2 transition-colors">
             @if (Auth::user()->hasRole('admin_sekolah'))
                 Admin Sekolah
