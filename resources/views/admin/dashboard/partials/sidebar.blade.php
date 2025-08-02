@@ -7,8 +7,8 @@
     x-show="sidebarOpen || window.innerWidth >= 1024" @click.outside="closeSidebar"
     class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-xl
                        transform transition-transform duration-300 ease-in-out
-                       lg:translate-x-0 lg:flex-shrink-0 lg:block overflow-y-auto transition-colors">
-    <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 h-16 flex items-center transition-colors">
+                       lg:translate-x-0 lg:flex-shrink-0 lg:block overflow-y-auto">
+    <div class="px-6 pt-4 pb-3 border-b border-gray-200 dark:border-gray-700 h-16 flex items-center transition-colors ">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white"> Akademika </h2>
         <button @click="sidebarOpen = !sidebarOpen"
             class="lg:hidden ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors">
@@ -34,7 +34,6 @@
                 Pengguna
             @endif
         </p>
-
         {{-- Dashboard Link (Selalu Ada) --}}
         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
             <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -59,7 +58,6 @@
                 </svg>
                 {{ __('Cetak Rapor Siswa') }}
             </x-nav-link>
-            {{-- TAMBAHKAN LINK INI --}}
             <x-nav-link :href="route('admin.reports.gradeSummaryFilterForm')" :active="request()->routeIs('admin.reports.gradeSummaryFilterForm') ||
                 request()->routeIs('admin.reports.generateGradeSummary')">
                 <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -493,6 +491,20 @@
                         </svg>
                         {{ __('Kalender Akademik') }}
                     </x-nav-link>
+                    @role('admin_sekolah')
+                        {{-- <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
+                            Komunikasi
+                        </div> --}}
+                        <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 20v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8 1-3-3m0 0L8 20m1-16h6m-3-3v8"></path>
+                            </svg>
+                            {{ __('Manajemen Berita') }}
+                        </x-nav-link>
+                    @endrole
+
                 </div>
             </div>
 

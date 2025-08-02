@@ -36,8 +36,6 @@
     @include('admin.dashboard.partials.header')
 
     @include('admin.dashboard.partials.sidebar')
-
-    {{-- Main Content --}}
     <main class="lg:ml-64 p-4 mt-4" id="">
         {{ $slot }}
     </main>
@@ -47,7 +45,7 @@
             return {
                 darkMode: localStorage.getItem('theme') === 'dark',
                 sidebarOpen: false,
-                sidebarOpen: window.innerWidth >= 1024, // default terbuka di desktop
+                sidebarOpen: window.innerWidth >= 1024,
                 init() {
                     this.updateTheme();
                     window.addEventListener('resize', () => {

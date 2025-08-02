@@ -11,12 +11,14 @@ use App\Http\Controllers\Admin\TeachingAssignmentController;
 use App\Http\Controllers\Admin\GradeController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CalendarEventController;
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,9 +31,20 @@ use App\Http\Controllers\NotificationController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['web', 'forcelogout'])->group(function () {
+    // Semua route yang harus kena force logout saat maintenance
+    Route::get('/', fn() => view('welcome'));
+    // dll
 });
+
+
+Route::get('/', [WebController::class, 'home'])->name('web.home');
+Route::get('/berita', [WebController::class, 'newsIndex'])->name('web.news.index');
+Route::get('/berita/{slug}', [WebController::class, 'newsShow'])->name('web.news.show');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -62,6 +75,8 @@ Route::middleware(['auth', 'role:admin_sekolah'])->prefix('admin')->name('admin.
 
     Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+
+    Route::resource('news', NewsController::class);
 });
 
 // ----------- ROUTE UNTUK ADMIN DAN GURU -----------

@@ -35,5 +35,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MessageSeeder::class);
         $this->call(NotificationSeeder::class);
         $this->call(MessageAttachmentSeeder::class);
+        $this->call(NewsSeeder::class);
     }
 }
