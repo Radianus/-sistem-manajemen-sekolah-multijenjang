@@ -10,12 +10,14 @@ class ForceLogoutIfMaintenance
 {
     public function handle(Request $request, Closure $next)
     {
-        if (app()->isDownForMaintenance() && Auth::check()) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        if (app()->isDownForMaintenance() && !app()->runningInConsole()) {
+            if (request()->hasCookie('laravel_maintenance')) {
+                // Biarkan user lewat, dia akses pakai secret link
+                return $next($request);
+            }
 
-            return redirect('/')->with('message', 'Aplikasi sedang dalam pemeliharaan. Silakan coba lagi nanti.');
+            Auth::logout(); // logout user lain
+            return redirect()->route('login')->with('message', 'Aplikasi sedang maintenance');
         }
 
         return $next($request);
