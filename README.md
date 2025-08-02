@@ -315,13 +315,23 @@ Berikut adalah beberapa relasi kunci antar model:
     * Jika aplikasi berjalan di IIS dan Anda mendapatkan 404, itu berarti IIS tidak meneruskan request ke `index.php` Laravel.
     * **Solusi:** Pastikan modul URL Rewrite terinstal di IIS dan ada file `web.config` yang benar di folder `public` proyek Laravel Anda.
 
-## Hubungi Kami
+## 📄 Lisensi
 
-* **Ranus di Facebook:**  https://web.facebook.com/nanu.ranusate
+Proyek ini **tidak open-source secara bebas** dan **tidak boleh digunakan untuk tujuan komersial tanpa izin tertulis**.
 
-## Lisensi
+📌 Anda diperbolehkan:
+- Meng-clone atau fork repository ini untuk keperluan pembelajaran/pribadi saja.
 
-Proyek ini dilisensikan di bawah Lisensi MIT.
+🚫 Anda **tidak diperbolehkan**:
+- Mengubah dan menjual ulang source code ini.
+- Menggunakan sebagian/keseluruhan kode untuk proyek komersial.
+- Menghapus identitas pembuat atau menyamar sebagai pemilik asli.
+- Menyebarluaskan ulang secara publik dalam bentuk apapun tanpa izin.
+
+> Untuk lisensi komersial, silakan hubungi saya melalui:
+> 📧 ranusate19@gmai.com atau [Facebook Ranus Ate](https://web.facebook.com/nanu.ranusate)
 
 ---
-````
+
+© 2025 Nanu (Ranus). All rights reserved.
+
