@@ -31,11 +31,9 @@ use App\Http\Controllers\WebController;
 |
 */
 
-Route::middleware(['web', 'forcelogout'])->group(function () {
-    // Semua route yang harus kena force logout saat maintenance
-    Route::get('/', fn() => view('welcome'));
-    // dll
-});
+// Route::middleware(['web', 'forcelogout'])->group(function () {
+//     Route::get('/', fn() => view('welcome'));
+// });
 
 
 Route::get('/', [WebController::class, 'home'])->name('web.home');

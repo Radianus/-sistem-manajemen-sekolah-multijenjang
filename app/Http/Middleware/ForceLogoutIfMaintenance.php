@@ -19,7 +19,6 @@ class ForceLogoutIfMaintenance
             Auth::logout(); // logout user lain
             return redirect()->route('login')->with('message', 'Aplikasi sedang maintenance');
         }
-
         return $next($request);
     }
 }

@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
             'role_or_permission' => RoleOrPermissionMiddleware::class,
-            'forcelogout' => \App\Http\Middleware\ForceLogoutIfMaintenance::class,
+            // 'forcelogout' => \App\Http\Middleware\ForceLogoutIfMaintenance::class,
 
         ]);
     })
