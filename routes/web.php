@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\TeachingAssignmentController;
 use App\Http\Controllers\Admin\GradeController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CalendarEventController;
+use App\Http\Controllers\Admin\HeroSliderController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\ScheduleController;
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'role:admin_sekolah'])->prefix('admin')->name('admin.
     Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
 
     Route::resource('news', NewsController::class);
+    Route::resource('hero_sliders', HeroSliderController::class)->parameters(['hero_sliders' => 'slider']);
 });
 
 // ----------- ROUTE UNTUK ADMIN DAN GURU -----------

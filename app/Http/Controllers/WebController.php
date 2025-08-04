@@ -5,28 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\Announcement;
 use App\Models\CalendarEvent;
+use App\Models\HeroSlider;
 use Illuminate\Http\Request;
 
 class WebController extends Controller
 {
-    /**
-     * Display the public homepage.
-     */
     public function home()
     {
-        // Ambil data terbaru untuk homepage
         $latestNews = News::published()->latest()->take(3)->get();
-        // Anda mungkin juga perlu mengambil pengumuman di sini
         $importantAnnouncements = Announcement::active()
             ->targetedTo(['all', 'siswa', 'orang_tua'])
             ->latest()
             ->take(3)
             ->get();
+        // Ambil slider yang aktif, urutkan berdasarkan order
+        $sliders = HeroSlider::where('is_active', true)->orderBy('order')->get(); // <-- TAMBAHKAN INI
 
-        // Tambahkan globalSettings ke compact() untuk home.blade.php
-        return view('web.home', compact('latestNews', 'importantAnnouncements'));
+        return view('web.home', compact('latestNews', 'importantAnnouncements', 'sliders'));
     }
-
     /**
      * Display a listing of published news.
      */

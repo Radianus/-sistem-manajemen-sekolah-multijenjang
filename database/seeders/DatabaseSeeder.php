@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\HeroSlider;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesAndPermissionsSeeder::class);
 
-        // Kelas dan Mata Pelajaran bisa paralel, tapi seringkali kelas dibutuhkan untuk penugasan.
+        // // Kelas dan Mata Pelajaran bisa paralel, tapi seringkali kelas dibutuhkan untuk penugasan.
         // $this->call(SchoolClassSeeder::class);
         // $this->call(SubjectSeeder::class);
 
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(MessageSeeder::class);
         // $this->call(NotificationSeeder::class);
         // $this->call(MessageAttachmentSeeder::class);
-        // $this->call(NewsSeeder::class);
+        $this->call(NewsSeeder::class);
+        $this->call(HeroSliderSeeder::class);
     }
 }

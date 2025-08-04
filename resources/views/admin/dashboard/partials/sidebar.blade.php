@@ -46,6 +46,27 @@
         </x-nav-link>
         @role('admin_sekolah')
             <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
+                Manajemen Website
+            </div>
+            <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 20v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8 1-3-3m0 0L8 20m1-16h6m-3-3v8"></path>
+                </svg>
+                {{ __('Manajemen Berita') }}
+            </x-nav-link>
+            <x-nav-link :href="route('admin.hero_sliders.index')" :active="request()->routeIs('admin.hero_sliders.*')">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h18M3 14h18M3 18h18M3 6h18M3 10h18M3 14h18M3 18h18"></path>
+                </svg>
+                {{ __('Manajemen Slider') }}
+            </x-nav-link>
+        @endrole
+        @role('admin_sekolah')
+            <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
                 Laporan
             </div>
             <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
@@ -227,7 +248,7 @@
                     request()->routeIs('admin.assignments.*');
             @endphp
             {{-- menu untuk GURU --}}
-            <div x-data="{ open: false }" x-init="open = {{ $isMenuGuru ? 'true' : 'false' }}" class="relative">
+            <div x-data="{ open: false }" x-init="open = {{ $isMenuGuru ? 'true' : 'false' }}" class="relative hidden">
                 <button @click="open = !open"
                     class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
                     <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -491,19 +512,6 @@
                         </svg>
                         {{ __('Kalender Akademik') }}
                     </x-nav-link>
-                    @role('admin_sekolah')
-                        {{-- <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
-                            Komunikasi
-                        </div> --}}
-                        <x-nav-link :href="route('admin.news.index')" :active="request()->routeIs('admin.news.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 20v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2m8 1-3-3m0 0L8 20m1-16h6m-3-3v8"></path>
-                            </svg>
-                            {{ __('Manajemen Berita') }}
-                        </x-nav-link>
-                    @endrole
 
                 </div>
             </div>

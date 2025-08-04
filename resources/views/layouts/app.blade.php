@@ -39,8 +39,18 @@
     <main class="lg:ml-64 p-4 mt-4" id="">
         {{ $slot }}
     </main>
-
     <script>
+        function previewNewAvatar(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('image');
+                output.src = reader.result;
+            };
+            if (event.target.files[0]) {
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        }
+
         function mainApp() {
             return {
                 darkMode: localStorage.getItem('theme') === 'dark',

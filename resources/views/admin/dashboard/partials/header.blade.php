@@ -28,7 +28,7 @@
                         </path>
                     </svg>
                     <span id="unread-notifications-count"
-                        class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2 hidden">
+                        class="absolute top-0 right-0 items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2 hidden">
                     </span>
                 </a>
             </div>
@@ -57,6 +57,9 @@
                     </button>
                 </x-slot>
                 <x-slot name="content">
+                    <x-dropdown-link :href="route('web.home')">
+                        {{ __('Website') }}
+                    </x-dropdown-link>
                     <x-dropdown-link :href="route('profile.edit')">
                         {{ __('Profile') }}
                     </x-dropdown-link>
