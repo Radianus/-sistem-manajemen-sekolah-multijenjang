@@ -26,16 +26,12 @@
     <div x-data="{
         sidebarOpen: window.innerWidth >= 1024,
         currentTheme: localStorage.theme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
-    
-        // FUNGSI INI HARUS ADA DAN TIDAK ADA SALAH KETIK
         toggleTheme() {
             this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
             localStorage.setItem('theme', this.currentTheme);
             document.documentElement.classList.toggle('dark', this.currentTheme === 'dark');
         }
     }" x-init="document.documentElement.classList.toggle('dark', currentTheme === 'dark');
-    
-    
     $watch('currentTheme', value => {
         if (value === 'dark') {
             document.documentElement.classList.add('dark')

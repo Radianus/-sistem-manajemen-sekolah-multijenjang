@@ -79,78 +79,78 @@ class RolesAndPermissionsSeeder extends Seeder
             ['name' => 'Admin Utama Akademika', 'password' => bcrypt('password'), 'email_verified_at' => now()]
         )->assignRole('admin_sekolah');
 
-        // Buat User Guru dengan Email Tetap
-        $fixedGuruCount = 3;
-        // Ambil objek user guru yang spesifik
-        $guruSatu = User::firstOrCreate(
-            ['email' => 'guru@akademika.com'],
-            ['name' => 'Guru Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        );
-        $guruSatu->assignRole('guru');
+        // // Buat User Guru dengan Email Tetap
+        // $fixedGuruCount = 3;
+        // // Ambil objek user guru yang spesifik
+        // $guruSatu = User::firstOrCreate(
+        //     ['email' => 'guru@akademika.com'],
+        //     ['name' => 'Guru Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // );
+        // $guruSatu->assignRole('guru');
 
-        User::firstOrCreate(
-            ['email' => 'guru2@akademika.com'],
-            ['name' => 'Guru Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('guru');
-        User::firstOrCreate(
-            ['email' => 'guru3@akademika.com'],
-            ['name' => 'Guru Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('guru');
+        // User::firstOrCreate(
+        //     ['email' => 'guru2@akademika.com'],
+        //     ['name' => 'Guru Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('guru');
+        // User::firstOrCreate(
+        //     ['email' => 'guru3@akademika.com'],
+        //     ['name' => 'Guru Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('guru');
 
         // Buat User Guru Tambahan (acak)
-        $totalGuruDesired = 10;
-        if ($totalGuruDesired > $fixedGuruCount) {
-            User::factory()->count($totalGuruDesired - $fixedGuruCount)->create()->each(function (User $user) {
-                $user->assignRole('guru');
-            });
-        }
+        // $totalGuruDesired = 10;
+        // if ($totalGuruDesired > $fixedGuruCount) {
+        //     User::factory()->count($totalGuruDesired - $fixedGuruCount)->create()->each(function (User $user) {
+        //         $user->assignRole('guru');
+        //     });
+        // }
 
-        // Buat User Siswa dengan Email Tetap
-        $fixedSiswaCount = 3;
-        $siswaSatu = User::firstOrCreate(
-            ['email' => 'siswa@akademika.com'],
-            ['name' => 'Siswa Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        );
-        $siswaSatu->assignRole('siswa');
-        User::firstOrCreate(
-            ['email' => 'siswa2@akademika.com'],
-            ['name' => 'Siswa Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('siswa');
-        User::firstOrCreate(
-            ['email' => 'siswa3@akademika.com'],
-            ['name' => 'Siswa Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('siswa');
+        // // Buat User Siswa dengan Email Tetap
+        // $fixedSiswaCount = 3;
+        // $siswaSatu = User::firstOrCreate(
+        //     ['email' => 'siswa@akademika.com'],
+        //     ['name' => 'Siswa Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // );
+        // $siswaSatu->assignRole('siswa');
+        // User::firstOrCreate(
+        //     ['email' => 'siswa2@akademika.com'],
+        //     ['name' => 'Siswa Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('siswa');
+        // User::firstOrCreate(
+        //     ['email' => 'siswa3@akademika.com'],
+        //     ['name' => 'Siswa Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('siswa');
 
-        // Buat User Siswa Tambahan (acak)
-        $totalSiswaDesired = 50;
-        if ($totalSiswaDesired > $fixedSiswaCount) {
-            User::factory()->count($totalSiswaDesired - $fixedSiswaCount)->create()->each(function (User $user) {
-                $user->assignRole('siswa');
-            });
-        }
+        // // Buat User Siswa Tambahan (acak)
+        // $totalSiswaDesired = 50;
+        // if ($totalSiswaDesired > $fixedSiswaCount) {
+        //     User::factory()->count($totalSiswaDesired - $fixedSiswaCount)->create()->each(function (User $user) {
+        //         $user->assignRole('siswa');
+        //     });
+        // }
 
-        // Buat User Orang Tua dengan Email Tetap
-        $fixedOrtuCount = 3;
-        User::firstOrCreate(
-            ['email' => 'ortu@akademika.com'],
-            ['name' => 'Orang Tua Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('orang_tua');
-        User::firstOrCreate(
-            ['email' => 'ortu2@akademika.com'],
-            ['name' => 'Orang Tua Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('orang_tua');
-        User::firstOrCreate(
-            ['email' => 'ortu3@akademika.com'],
-            ['name' => 'Orang Tua Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
-        )->assignRole('orang_tua');
+        // // Buat User Orang Tua dengan Email Tetap
+        // $fixedOrtuCount = 3;
+        // User::firstOrCreate(
+        //     ['email' => 'ortu@akademika.com'],
+        //     ['name' => 'Orang Tua Satu', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('orang_tua');
+        // User::firstOrCreate(
+        //     ['email' => 'ortu2@akademika.com'],
+        //     ['name' => 'Orang Tua Dua', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('orang_tua');
+        // User::firstOrCreate(
+        //     ['email' => 'ortu3@akademika.com'],
+        //     ['name' => 'Orang Tua Tiga', 'password' => bcrypt('password'), 'email_verified_at' => now()]
+        // )->assignRole('orang_tua');
 
-        // Buat User Orang Tua Tambahan (acak)
-        $totalOrtuDesired = 20;
-        if ($totalOrtuDesired > $fixedOrtuCount) {
-            User::factory()->count($totalOrtuDesired - $fixedOrtuCount)->create()->each(function (User $user) {
-                $user->assignRole('orang_tua');
-            });
-        }
+        // // Buat User Orang Tua Tambahan (acak)
+        // $totalOrtuDesired = 20;
+        // if ($totalOrtuDesired > $fixedOrtuCount) {
+        //     User::factory()->count($totalOrtuDesired - $fixedOrtuCount)->create()->each(function (User $user) {
+        //         $user->assignRole('orang_tua');
+        //     });
+        // }
 
         $this->command->info('Roles and permissions, and initial users seeded.');
     }

@@ -31,9 +31,9 @@ use App\Http\Controllers\WebController;
 |
 */
 
-// Route::middleware(['web', 'forcelogout'])->group(function () {
-//     Route::get('/', fn() => view('welcome'));
-// });
+Route::middleware(['web', 'forcelogout'])->group(function () {
+    Route::get('/', fn() => view('welcome'));
+});
 
 
 Route::get('/', [WebController::class, 'home'])->name('web.home');

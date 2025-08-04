@@ -16,25 +16,25 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
 
         // Kelas dan Mata Pelajaran bisa paralel, tapi seringkali kelas dibutuhkan untuk penugasan.
-        $this->call(SchoolClassSeeder::class);
-        $this->call(SubjectSeeder::class);
+        // $this->call(SchoolClassSeeder::class);
+        // $this->call(SubjectSeeder::class);
 
-        // Siswa membutuhkan user (dari RolesAndPermissionsSeeder) dan kelas.
-        $this->call(StudentSeeder::class);
-        $this->call(ParentStudentSeeder::class);
-        // Penugasan Mengajar membutuhkan kelas, mata pelajaran, dan guru (user).
-        $this->call(TeachingAssignmentSeeder::class);
-        $this->call(AssignmentSeeder::class);
+        // // Siswa membutuhkan user (dari RolesAndPermissionsSeeder) dan kelas.
+        // $this->call(StudentSeeder::class);
+        // $this->call(ParentStudentSeeder::class);
+        // // Penugasan Mengajar membutuhkan kelas, mata pelajaran, dan guru (user).
+        // $this->call(TeachingAssignmentSeeder::class);
+        // $this->call(AssignmentSeeder::class);
 
-        // Nilai dan Absensi membutuhkan siswa dan penugasan mengajar.
-        $this->call(GradeSeeder::class);
-        $this->call(AttendanceSeeder::class);
-        $this->call(AnnouncementSeeder::class);
-        $this->call(ScheduleSeeder::class);
-        $this->call(SettingSeeder::class);
-        $this->call(MessageSeeder::class);
-        $this->call(NotificationSeeder::class);
-        $this->call(MessageAttachmentSeeder::class);
-        $this->call(NewsSeeder::class);
+        // // Nilai dan Absensi membutuhkan siswa dan penugasan mengajar.
+        // $this->call(GradeSeeder::class);
+        // $this->call(AttendanceSeeder::class);
+        // $this->call(AnnouncementSeeder::class);
+        // $this->call(ScheduleSeeder::class);
+        // $this->call(SettingSeeder::class);
+        // $this->call(MessageSeeder::class);
+        // $this->call(NotificationSeeder::class);
+        // $this->call(MessageAttachmentSeeder::class);
+        // $this->call(NewsSeeder::class);
     }
 }
