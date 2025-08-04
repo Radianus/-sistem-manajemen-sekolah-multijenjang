@@ -20,7 +20,8 @@
             @endif
 
             <div class="prose prose-gray dark:prose-invert max-w-none">
-                {!! nl2br(e($news->content)) !!}
+                {!! $news->content !!}
+
             </div>
 
             <div class="mt-8 text-right">
