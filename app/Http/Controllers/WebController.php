@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use App\Models\Announcement;
 use App\Models\HeroSlider;
-use App\Models\Gallery; // <-- TAMBAHKAN INI
+use App\Models\Gallery;
 use Illuminate\Http\Request;
 
 class WebController extends Controller
@@ -22,9 +22,9 @@ class WebController extends Controller
             ->take(3)
             ->get();
         $sliders = HeroSlider::where('is_active', true)->orderBy('order')->get();
-        $latestGallery = Gallery::latest()->take(4)->get(); // <-- TAMBAHKAN INI
+        $latestGallery = Gallery::latest()->take(4)->get();
 
-        return view('web.home', compact('latestNews', 'importantAnnouncements', 'sliders', 'latestGallery')); // Tambah latestGallery
+        return view('web.home', compact('latestNews', 'importantAnnouncements', 'sliders', 'latestGallery'));
     }
 
     /**
@@ -49,9 +49,9 @@ class WebController extends Controller
     /**
      * Display the public gallery page.
      */
-    public function galleryIndex() // <-- TAMBAHKAN METODE INI
+    public function galleryIndex()
     {
-        $gallery = Gallery::latest()->paginate(16); // Ambil semua gambar galeri terbaru
+        $gallery = Gallery::latest()->paginate(16);
         return view('web.gallery.index', compact('gallery'));
     }
 }

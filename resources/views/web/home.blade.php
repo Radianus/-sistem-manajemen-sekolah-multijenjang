@@ -52,6 +52,10 @@
                 </svg>
             </button>
         </div>
+    @else
+        <div class="bg-gray-200 dark:bg-gray-700 h-screen flex items-center justify-center">
+            <p class="text-gray-500 dark:text-gray-400">Tidak ada slider yang tersedia saat ini.</p>
+        </div>
     @endif
 
     {{-- Berita Terbaru --}}
