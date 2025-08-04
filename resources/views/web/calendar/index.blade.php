@@ -15,49 +15,59 @@
                     <p>🙁 Belum ada acara yang terjadwal untuk tahun ini.</p>
                 </div>
             @else
-                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-                        <thead
-                            class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 text-gray-700 dark:text-gray-300 uppercase text-xs font-semibold">
-                            <tr>
-                                <th class="px-6 py-3 text-left">Acara</th>
-                                <th class="px-6 py-3 text-left">Tanggal</th>
-                                <th class="px-6 py-3 text-left">Jenis</th>
-                                <th class="px-6 py-3 text-left">Lokasi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
-                            @foreach ($events as $event)
-                                <tr class="hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors duration-200">
-                                    <td class="px-6 py-4 font-semibold text-gray-800 dark:text-white">
-                                        {{ $event->title }}
-                                        @if ($event->description)
-                                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                                {{ Str::limit($event->description, 100) }}
-                                            </p>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
-                                        {{ $event->start_date->format('d M Y') }}
-                                        @if ($event->end_date && $event->end_date != $event->start_date)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                s/d {{ $event->end_date->format('d M Y') }}
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <span
-                                            class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100">
-                                            {{ $event->event_type }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 text-gray-700 dark:text-gray-300">
-                                        {{ $event->location ?? '-' }}
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach ($events as $event)
+                        <div
+                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300">
+                            <div class="mb-4">
+                                <h2 class="text-lg font-bold text-gray-900 dark:text-white">
+                                    {{ $event->title }}
+                                </h2>
+                                @if ($event->description)
+                                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                                        {{ Str::limit($event->description, 100) }}
+                                    </p>
+                                @endif
+                            </div>
+
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8 7V3M16 7V3M4 11h16M4 19h16M4 15h16" />
+                                </svg>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    {{ $event->start_date->format('d M Y') }}
+                                    @if ($event->end_date && $event->end_date != $event->start_date)
+                                        – {{ $event->end_date->format('d M Y') }}
+                                    @endif
+                                </p>
+                            </div>
+
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg class="w-5 h-5 text-green-500 dark:text-green-400" fill="none" stroke="currentColor"
+                                    stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M5.121 17.804A4 4 0 007 21h10a4 4 0 001.879-3.196l-1.334-8A2 2 0 0015.58 8H8.42a2 2 0 00-1.965 1.804l-1.334 8z" />
+                                </svg>
+                                <span
+                                    class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs font-semibold px-3 py-1 rounded-full">
+                                    {{ $event->event_type }}
+                                </span>
+                            </div>
+
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-5 h-5 text-yellow-500 dark:text-yellow-400" fill="none"
+                                    stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M17.657 16.657L13.414 12l4.243-4.243M6.343 7.343L10.586 12l-4.243 4.243" />
+                                </svg>
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    {{ $event->location ?? '-' }}
+                                </p>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
 
                 <div class="mt-8 flex justify-center">
