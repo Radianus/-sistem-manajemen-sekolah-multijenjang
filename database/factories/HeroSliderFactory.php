@@ -20,20 +20,31 @@ class HeroSliderFactory extends Factory
      */
     public function definition(): array
     {
-        // Path dummy untuk gambar slider (asumsi ada file di storage/app/public/hero_sliders)
         $imagePaths = [
             'hero_sliders/slider1.jpg',
             'hero_sliders/slider2.jpg',
             'hero_sliders/slider3.jpg',
         ];
-
         return [
-            'title' => fake()->sentence(rand(3, 6)),
-            'subtitle' => fake()->optional()->sentence(rand(8, 15)),
+            'title' => fake()->randomElement([
+                'Selamat Datang di SMK Anugerah',
+                'Pendaftaran Siswa Baru Telah Dibuka',
+                'SMK Anugerah: Membangun Masa Depan Cerah',
+                'Bergabunglah Bersama Kami',
+                'Raih Cita-Citamu Bersama SMK Anugerah',
+            ]),
+            'subtitle' => fake()->randomElement([
+                'Mewujudkan generasi unggul dan berakhlak mulia.',
+                'Pendidikan berkualitas untuk masa depan yang gemilang.',
+                'Kurikulum modern dan guru profesional siap mendampingimu.',
+                'Kami hadir untuk mencetak lulusan siap kerja dan berwirausaha.',
+                'Temukan bakat dan kembangkan potensimu bersama kami.',
+                null, // subtitle kadang bisa kosong
+            ]),
             'image_path' => fake()->randomElement($imagePaths),
-            'link_url' => fake()->optional(70)->url(), // 70% kemungkinan punya link
+            'link_url' => fake()->optional(70)->url(),
             'order' => fake()->unique()->numberBetween(1, 10),
-            'is_active' => fake()->boolean(90), // 90% kemungkinan aktif
+            'is_active' => fake()->boolean(90),
         ];
     }
 }
