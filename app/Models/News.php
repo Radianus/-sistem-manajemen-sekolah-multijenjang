@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class News extends Model
 {
@@ -55,5 +56,28 @@ class News extends Model
         static::updating(function ($news) {
             $news->slug = Str::slug($news->title);
         });
+    }
+
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image_path) {
+            return asset('storage/' . $this->image_path);
+        }
+
+        // Fetch dari Unsplash resmi
+        $response = Http::withHeaders([
+            'Accept-Version' => 'v1',
+            'Authorization' => 'Client-ID ' . config('services.unsplash.access_key'),
+        ])->get('https://api.unsplash.com/photos/random', [
+            'query' => 'school education',
+            'orientation' => 'landscape',
+        ]);
+
+        if ($response->successful()) {
+            return $response->json('urls.regular');
+        }
+
+        return 'https://via.placeholder.com/800x600?text=No+Image';
     }
 }

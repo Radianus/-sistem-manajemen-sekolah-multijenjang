@@ -22,7 +22,7 @@ class GallerySeeder extends Seeder
         }
 
         // Buat 10 gambar dummy
-        Gallery::factory()->count(10)->create();
+        Gallery::factory()->count(7)->create();
 
         $this->command->info('Gallery seeded: ' . Gallery::count());
     }

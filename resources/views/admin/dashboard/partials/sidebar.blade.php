@@ -72,6 +72,15 @@
                 </svg>
                 {{ __('Manajemen Galeri') }}
             </x-nav-link>
+            <x-nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">
+                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.502-1.288 1.488-2.274 2.776-2.776s2.274-.502 3.562-.008L21 6l-4 4-2-2-3-3-2-2zM4 16h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3a1 1 0 011-1zM4 4h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z">
+                    </path>
+                </svg>
+                {{ __('Pengaturan Sistem') }}
+            </x-nav-link>
         @endrole
         @role('admin_sekolah')
             <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
@@ -199,15 +208,7 @@
                         </svg>
                         {{ __('Manajemen Jadwal Pelajaran') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">
-                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.502-1.288 1.488-2.274 2.776-2.776s2.274-.502 3.562-.008L21 6l-4 4-2-2-3-3-2-2zM4 16h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3a1 1 0 011-1zM4 4h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z">
-                            </path>
-                        </svg>
-                        {{ __('Pengaturan Sistem') }}
-                    </x-nav-link>
+
                     <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
                         <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">

@@ -3,7 +3,7 @@
 @section('content')
     {{-- Hero Slider --}}
     @if ($sliders->isNotEmpty())
-        <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-[80vh] overflow-hidden">
+        <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-screen overflow-hidden">
             <div class="absolute inset-0 flex transition-transform ease-in-out duration-500"
                 :style="'transform: translateX(-' + currentSlide * 100 + '%)'">
                 @foreach ($sliders as $slider)
