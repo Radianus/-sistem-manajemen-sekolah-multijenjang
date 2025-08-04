@@ -1,4 +1,6 @@
-<x-web-layout>
+@extends('layouts.web')
+
+@section('content')
     <div class="container mx-auto p-4">
         <h1 class="text-3xl font-bold mb-6 text-center">Galeri Sekolah</h1>
 
@@ -23,4 +25,4 @@
             </div>
         @endif
     </div>
-</x-web-layout>
+@endsection

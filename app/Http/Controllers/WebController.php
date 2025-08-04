@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use App\Models\Announcement;
+use App\Models\CalendarEvent;
 use App\Models\HeroSlider;
 use App\Models\Gallery;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class WebController extends Controller
@@ -53,5 +55,35 @@ class WebController extends Controller
     {
         $gallery = Gallery::latest()->paginate(16);
         return view('web.gallery.index', compact('gallery'));
+    }
+
+
+    public function about()
+    {
+        return view('web.about');
+    }
+
+    /**
+     * Display the public 'Contact' page.
+     */
+    public function contact()
+    {
+        return view('web.contact');
+    }
+    /**
+     * Display the public academic calendar page.
+     */
+    public function calendarIndex()
+    {
+        // Ambil semua event yang aktif dan ditargetkan ke publik
+        $events = CalendarEvent::activeBetween(Carbon::now()->startOfYear(), Carbon::now()->endOfYear())
+            ->where(function ($query) {
+                $query->targetedTo('all');
+            })
+            ->orderBy('start_date')
+            ->paginate(15);
+
+        $currentYear = Carbon::now()->year;
+        return view('web.calendar.index', compact('events', 'currentYear'));
     }
 }

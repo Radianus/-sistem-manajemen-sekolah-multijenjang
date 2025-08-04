@@ -8,7 +8,7 @@
 
         {{-- Menu Desktop --}}
         <nav class="hidden md:flex items-center space-x-6">
-            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index']] as $item)
+            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index'], ['label' => 'Kalender', 'route' => 'web.calendar.index'], ['label' => 'Kontak', 'route' => 'web.contact'], ['label' => 'Tentang Kami', 'route' => 'web.about']] as $item)
                 @php
                     $isActive = request()->routeIs($item['route'])
                         ? 'text-blue-600 dark:text-blue-400 font-semibold'
@@ -23,14 +23,14 @@
             @if (Auth::check())
                 <div class="relative group">
                     <button
-                        class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none">
-                        {{-- Avatar atau icon user --}}
-                        <svg class="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600 p-1" fill="none"
-                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>Halo, {{ Auth::user()->name }}</span>
+                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150 transition-colors">
+                        @if (Auth::user()->avatar)
+                            <img src="{{ Storage::url(Auth::user()->avatar) }}" alt="{{ Auth::user()->name }}"
+                                class="h-8 w-8 rounded-full object-cover mr-2">
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=EBF4FF"
+                                alt="{{ Auth::user()->name }}" class="h-8 w-8 rounded-full object-cover mr-2">
+                        @endif
                     </button>
                     {{-- Dropdown muncul saat hover --}}
                     <div

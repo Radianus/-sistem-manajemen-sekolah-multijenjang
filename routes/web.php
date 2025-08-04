@@ -41,7 +41,11 @@ Route::middleware(['web', 'forcelogout'])->group(function () {
 Route::get('/', [WebController::class, 'home'])->name('web.home');
 Route::get('/berita', [WebController::class, 'newsIndex'])->name('web.news.index');
 Route::get('/berita/{slug}', [WebController::class, 'newsShow'])->name('web.news.show');
-Route::get('/galeri', [WebController::class, 'galleryIndex'])->name('web.gallery.index'); // <-- TAMBAHKAN INI
+Route::get('/galeri', [WebController::class, 'galleryIndex'])->name('web.gallery.index');
+Route::get('/tentang-kami', [WebController::class, 'about'])->name('web.about');
+Route::get('/kontak', [WebController::class, 'contact'])->name('web.contact');
+Route::get('/kalender-akademik', [WebController::class, 'calendarIndex'])->name('web.calendar.index');
+
 
 // Route::get('/', function () {
 //     return view('welcome');

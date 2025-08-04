@@ -8,7 +8,7 @@
     <title>{{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+    <link rel="icon" href="{{ asset('favicon-32x32.png') }}" type="image/png" class="dark:bg-gray-800 bg-red-800">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia(
