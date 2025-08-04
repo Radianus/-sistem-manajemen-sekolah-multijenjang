@@ -70,15 +70,20 @@
                                             </td>
                                             <td class="py-4 px-6 flex items-center space-x-3">
                                                 <a href="{{ route('admin.hero_sliders.edit', $slider) }}"
-                                                    class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                                    class="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-xs font-semibold uppercase rounded-md hover:bg-blue-600 transition">
+                                                    ✏️ Edit
+                                                </a>
                                                 <form action="{{ route('admin.hero_sliders.destroy', $slider) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus slider ini?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit"
-                                                        class="font-medium text-red-600 dark:text-red-500 hover:underline">Hapus</button>
+                                                        class="inline-flex items-center px-3 py-1 bg-red-600 text-white text-xs font-semibold uppercase rounded-md hover:bg-red-700 transition">
+                                                        🗑️ Hapus
+                                                    </button>
                                                 </form>
+
                                             </td>
                                         </tr>
                                     @endforeach

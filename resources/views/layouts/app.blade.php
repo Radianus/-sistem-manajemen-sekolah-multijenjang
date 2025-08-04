@@ -34,7 +34,6 @@
 
 <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors">
     @include('admin.dashboard.partials.header')
-
     @include('admin.dashboard.partials.sidebar')
     <main class="lg:ml-64 p-4 mt-4" id="">
         {{ $slot }}
@@ -237,6 +236,53 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('image');
+            const imagePreview = document.getElementById('imagePreview');
+
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.src = '';
+                    imagePreview.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('image');
+            const previewContainer = document.createElement('div');
+            previewContainer.classList.add('mb-2');
+            imageInput.parentNode.insertBefore(previewContainer, imageInput);
+
+            imageInput.addEventListener('change', function() {
+                previewContainer.innerHTML = ''; // Kosongkan sebelumnya
+
+                const file = this.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Preview Gambar Baru';
+                        img.classList.add('w-64', 'h-auto', 'rounded-lg', 'mt-2');
+                        previewContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 </body>
 

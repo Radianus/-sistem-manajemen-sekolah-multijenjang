@@ -1,84 +1,144 @@
-  <header id="#" class="bg-white dark:bg-gray-800 shadow-sm transition-colors sticky top-0 z-50 ">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-          {{-- Logo dan Nama Sekolah --}}
-          <div class="flex items-center">
-              <a href="{{ route('web.home') }}"
-                  class="text-xl font-bold dark:text-white">{{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}</a>
-          </div>
-          {{-- Desktop Menu --}}
-          <nav class="hidden md:flex space-x-6 items-center">
-              <a href="{{ route('web.home') }}"
-                  class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
-              <a href="{{ route('web.news.index') }}"
-                  class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Berita</a>
-              <a href="{{ route('web.gallery.index') }}"
-                  class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri</a>
-              <a href="{{ route('login') }}"
-                  class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 transition ease-in-out duration-150">Login</a>
-              {{-- Toggle Dark/Light Mode --}}
-              <button @click="toggleTheme()" aria-label="Toggle dark mode"
-                  class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none">
-                  <svg class="h-6 w-6 fill-violet-700"
-                      :class="{ 'hidden': currentTheme === 'dark', 'block': currentTheme === 'light' }"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
-                      </path>
-                  </svg>
-                  <svg class="h-6 w-6 fill-yellow-500"
-                      :class="{ 'hidden': currentTheme === 'light', 'block': currentTheme === 'dark' }"
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z">
-                      </path>
-                  </svg>
-              </button>
-          </nav>
+<header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors" x-data="{ open: false, currentTheme: localStorage.getItem('theme') || 'light' }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
-          {{-- Mobile Menu --}}
-          <div class="flex items-center md:hidden">
-              <button @click="open = !open" type="button"
-                  class="inline-flex items-center p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-700 transition-colors">
-                  <svg class="h-6 w-6" :class="{ 'hidden': open, 'block': !open }" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                  <svg class="h-6 w-6" :class="{ 'hidden': !open, 'block': open }" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-              </button>
-          </div>
-      </div>
+        {{-- Logo Sekolah --}}
+        <a href="{{ route('web.home') }}" class="text-xl font-bold dark:text-white">
+            {{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}
+        </a>
 
-      {{-- Responsive Mobile Menu --}}
-      <div x-show="open" x-collapse
-          class="md:hidden bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-          <nav class="flex flex-col p-4 space-y-2">
-              <a href="{{ route('web.home') }}"
-                  class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Beranda</a>
-              <a href="{{ route('web.news.index') }}"
-                  class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Berita</a>
-              <a href="{{ route('web.gallery.index') }}"
-                  class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Galeri</a>
+        {{-- Menu Desktop --}}
+        <nav class="hidden md:flex items-center space-x-6">
+            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index']] as $item)
+                @php
+                    $isActive = request()->routeIs($item['route'])
+                        ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                        : 'text-gray-600 dark:text-gray-300';
+                @endphp
+                <a href="{{ route($item['route']) }}"
+                    class="px-3 py-2 transition-colors hover:text-blue-600 dark:hover:text-blue-400 {{ $isActive }}">
+                    {{ $item['label'] }}
+                </a>
+            @endforeach
+            {{-- Cek apakah user sudah login --}}
+            @if (Auth::check())
+                <div class="relative group">
+                    <button
+                        class="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none">
+                        {{-- Avatar atau icon user --}}
+                        <svg class="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600 p-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Halo, {{ Auth::user()->name }}</span>
+                    </button>
+                    {{-- Dropdown muncul saat hover --}}
+                    <div
+                        class="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 group-hover:translate-y-1 transition-all z-50">
+                        <a href="{{ route('dashboard') }}"
+                            class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Dashboard</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full text-left px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                {{-- Jika belum login, tampilkan link login --}}
+                <a href="{{ route('login') }}"
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-xs font-semibold uppercase rounded-md hover:bg-blue-700 transition">
+                    Login
+                </a>
+            @endif
 
-              <a href="{{ route('login') }}"
-                  class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Login</a>
+            {{-- Theme Toggle --}}
+            <button @click="toggleTheme()" aria-label="Toggle dark mode"
+                class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <template x-if="currentTheme === 'light'">
+                    <svg class="h-6 w-6 fill-yellow-500" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                    </svg>
+                </template>
+                <template x-if="currentTheme === 'dark'">
+                    <svg class="h-6 w-6 fill-violet-700" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </template>
+            </button>
+        </nav>
 
-              {{-- Toggle Dark/Light Mode Mobile --}}
-              <button @click="toggleTheme()"
-                  class="block w-full text-left px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
-                  <div class="flex items-center">
-                      <svg class="h-5 w-5 mr-2" :class="{ 'block': currentTheme === 'dark' }" fill="none"
-                          viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z">
-                          </path>
-                      </svg>
-                      <span x-text="currentTheme === 'dark' ? 'Tema Terang' : 'Tema Gelap'"></span>
-                  </div>
-              </button>
-          </nav>
-      </div>
-  </header>
+        {{-- Hamburger Mobile --}}
+        <button @click="open = !open"
+            class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+            <svg class="h-6 w-6" x-show="!open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg class="h-6 w-6" x-show="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+    {{-- Mobile Menu --}}
+    <div x-show="open" x-collapse
+        class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        <nav class="flex flex-col space-y-2 p-4">
+            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index']] as $item)
+                <a href="{{ route($item['route']) }}"
+                    class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                    {{ $item['label'] }}
+                </a>
+            @endforeach
+
+            {{-- Mobile Menu - Auth Check --}}
+            @if (Auth::check())
+                <div x-data="{ open: false }" class="relative px-3 py-2 text-gray-700 dark:text-gray-300">
+                    <button @click="open = !open" class="w-full flex justify-between items-center focus:outline-none">
+                        <span>Halo, {{ Auth::user()->name }}</span>
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <div x-show="open" @click.away="open = false" x-transition
+                        class="mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50">
+                        <a href="{{ route('dashboard') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            Dashboard
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-gray-700 dark:text-red-400">
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a href="{{ route('login') }}"
+                    class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+                    Login
+                </a>
+            @endif
+
+
+            {{-- Theme Toggle Mobile --}}
+            <button @click="toggleTheme()"
+                class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                </svg>
+                <span x-text="currentTheme === 'dark' ? 'Tema Terang' : 'Tema Gelap'"></span>
+            </button>
+        </nav>
+    </div>
+</header>

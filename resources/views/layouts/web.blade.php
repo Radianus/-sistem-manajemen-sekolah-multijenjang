@@ -39,6 +39,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+
             document.getElementById('content-wrapper')?.classList.add('opacity-100');
             const navbar = document.getElementById('main-navbar');
             const isHome = window.location.pathname === '/' || window.location.pathname === '/index';
@@ -63,6 +65,8 @@
             }
         });
     </script>
+
+
 </body>
 
 </html>

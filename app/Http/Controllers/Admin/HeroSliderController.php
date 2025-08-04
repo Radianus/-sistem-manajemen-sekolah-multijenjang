@@ -37,7 +37,7 @@ class HeroSliderController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:10048'],
             'link_url' => ['nullable', 'url', 'max:255'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
@@ -74,7 +74,7 @@ class HeroSliderController extends Controller
         $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'subtitle' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:10048'],
             'link_url' => ['nullable', 'url', 'max:255'],
             'order' => ['nullable', 'integer'],
             'is_active' => ['boolean'],
