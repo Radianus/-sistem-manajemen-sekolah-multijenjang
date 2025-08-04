@@ -82,31 +82,56 @@
                 }
             }
 
+            
+/* Scrollbar dasar: ramping dan modern */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
+/* Area track transparan */
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 
+/* Scrollbar thumb untuk LIGHT MODE */
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.15); /* hitam semi-transparan */
+  border-radius: 10px;
+  transition: background 0.3s ease;
 }
 
-.dark ::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.1);
+/* Hover efek di LIGHT MODE */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
 }
-/* Scrollbar auto-hide */
-.sidebar:hover::-webkit-scrollbar {
-  display: block;
+
+/* Scrollbar thumb untuk DARK MODE */
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1); /* putih semi-transparan */
+}
+
+/* Hover efek di DARK MODE */
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Sidebar scrollbar behavior: auto-hide elegan */
+.sidebar {
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer */
 }
 
 .sidebar::-webkit-scrollbar {
   display: none;
 }
 
+.sidebar:hover::-webkit-scrollbar {
+  display: block;
+}
+
+/* Smooth transitions on all elements (optional) */
 .transition-all {
   transition: all 0.3s ease-in-out;
 }

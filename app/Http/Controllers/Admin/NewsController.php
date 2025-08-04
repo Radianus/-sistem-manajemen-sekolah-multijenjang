@@ -49,9 +49,9 @@ class NewsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('public/news');
-            $imagePath = str_replace('public/', 'storage/', $imagePath);
+            $imagePath = $request->file('image')->store('news', 'public');
         }
+
 
         News::create([
             'title' => $request->title,
@@ -90,15 +90,18 @@ class NewsController extends Controller
         ]);
 
         $imagePath = $news->image_path;
+
         if ($request->hasFile('image')) {
-            if ($imagePath && Storage::disk('public')->exists(str_replace('storage/', 'public/', $imagePath))) {
-                Storage::disk('public')->delete(str_replace('storage/', 'public/', $imagePath));
+            // Hapus file lama
+            if ($imagePath && Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
             }
-            $imagePath = $request->file('image')->store('public/news');
-            $imagePath = str_replace('public/', 'storage/', $imagePath);
+
+            // Simpan file baru ke `storage/app/public/news`
+            $imagePath = $request->file('image')->store('news', 'public'); // 💡 Gak perlu str_replace
         } elseif ($request->boolean('remove_image') && $imagePath) {
-            if (Storage::disk('public')->exists(str_replace('storage/', 'public/', $imagePath))) {
-                Storage::disk('public')->delete(str_replace('storage/', 'public/', $imagePath));
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
             }
             $imagePath = null;
         }
