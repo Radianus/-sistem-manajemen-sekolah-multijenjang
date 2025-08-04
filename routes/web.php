@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\TeachingAssignmentController;
 use App\Http\Controllers\Admin\GradeController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\CalendarEventController;
+use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\HeroSliderController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\ReportController;
@@ -40,6 +41,7 @@ Route::middleware(['web', 'forcelogout'])->group(function () {
 Route::get('/', [WebController::class, 'home'])->name('web.home');
 Route::get('/berita', [WebController::class, 'newsIndex'])->name('web.news.index');
 Route::get('/berita/{slug}', [WebController::class, 'newsShow'])->name('web.news.show');
+Route::get('/galeri', [WebController::class, 'galleryIndex'])->name('web.gallery.index'); // <-- TAMBAHKAN INI
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -77,6 +79,7 @@ Route::middleware(['auth', 'role:admin_sekolah'])->prefix('admin')->name('admin.
 
     Route::resource('news', NewsController::class);
     Route::resource('hero_sliders', HeroSliderController::class)->parameters(['hero_sliders' => 'slider']);
+    Route::resource('galleries', GalleryController::class);
 });
 
 // ----------- ROUTE UNTUK ADMIN DAN GURU -----------

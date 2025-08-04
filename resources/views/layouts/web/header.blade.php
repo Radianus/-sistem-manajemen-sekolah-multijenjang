@@ -11,6 +11,8 @@
                   class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
               <a href="{{ route('web.news.index') }}"
                   class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Berita</a>
+              <a href="{{ route('web.gallery.index') }}"
+                  class="text-gray-600 dark:text-gray-300 px-3 py-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri</a>
               <a href="{{ route('login') }}"
                   class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 transition ease-in-out duration-150">Login</a>
               {{-- Toggle Dark/Light Mode --}}
@@ -58,6 +60,9 @@
                   class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Beranda</a>
               <a href="{{ route('web.news.index') }}"
                   class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Berita</a>
+              <a href="{{ route('web.gallery.index') }}"
+                  class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Galeri</a>
+
               <a href="{{ route('login') }}"
                   class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">Login</a>
 
