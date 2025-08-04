@@ -65,7 +65,7 @@
             <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 text-center">Sistem informasi sekolah yang memudahkan
                 pengelolaan data dan informasi sekolah.</p>
             <div class="text-center">
-                <a href="{{ route('web.about') }}"
+                <a href="#"
                     class="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow transition">Pelajari
                     Lebih Lanjut</a>
             </div>
