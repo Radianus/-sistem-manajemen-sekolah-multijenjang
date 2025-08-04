@@ -66,7 +66,22 @@
         });
     </script>
 
+    <script>
+        window.addEventListener("scroll", function() {
+            const header = document.getElementById("header");
+            const links = header.querySelectorAll(".header-link");
 
+            if (window.scrollY > 50) {
+                header.classList.add("bg-white", "shadow-md");
+                links.forEach(link => link.classList.add("text-black"));
+                links.forEach(link => link.classList.remove("text-white"));
+            } else {
+                header.classList.remove("bg-white", "shadow-md");
+                links.forEach(link => link.classList.remove("text-black"));
+                links.forEach(link => link.classList.add("text-white"));
+            }
+        });
+    </script>
 </body>
 
 </html>

@@ -9,8 +9,9 @@
             {{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}
         </a>
         <div>
+
             {{-- Menu Desktop --}}
-            <nav class="hidden md:flex items-center space-x-4">
+            <nav class="hidden md:flex items-center space-x-6">
                 @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index'], ['label' => 'Kalender', 'route' => 'web.calendar.index'], ['label' => 'Kontak', 'route' => 'web.contact'], ['label' => 'Tentang Kami', 'route' => 'web.about']] as $item)
                     @php
                         $isActive = request()->routeIs($item['route'])
@@ -72,75 +73,76 @@
                     </template>
                 </button>
             </nav>
+
+            {{-- Hamburger Mobile --}}
+            <button @click="open = !open"
+                class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+                <svg class="h-6 w-6" x-show="!open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                <svg class="h-6 w-6" x-show="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
 
-        {{-- Hamburger Mobile --}}
-        <button @click="open = !open"
-            class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
-            <svg class="h-6 w-6" x-show="!open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <svg class="h-6 w-6" x-show="open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-        </button>
-    </div>
+        {{-- Mobile Menu --}}
+        <div x-show="open" x-collapse
+            class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+            <nav class="flex flex-col space-y-2 p-4">
+                @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index'], ['label' => 'Kalender', 'route' => 'web.calendar.index'], ['label' => 'Kontak', 'route' => 'web.contact'], ['label' => 'Tentang Kami', 'route' => 'web.about']] as $item)
+                    <a href="{{ route($item['route']) }}"
+                        class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        {{ $item['label'] }}
+                    </a>
+                @endforeach
 
-    {{-- Mobile Menu --}}
-    <div x-show="open" x-collapse
-        class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-        <nav class="flex flex-col space-y-2 p-4">
-            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index'], ['label' => 'Kalender', 'route' => 'web.calendar.index'], ['label' => 'Kontak', 'route' => 'web.contact'], ['label' => 'Tentang Kami', 'route' => 'web.about']] as $item)
-                <a href="{{ route($item['route']) }}"
-                    class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                    {{ $item['label'] }}
-                </a>
-            @endforeach
+                {{-- Mobile Menu - Auth Check --}}
+                @if (Auth::check())
+                    <div x-data="{ open: false }" class="relative px-3 py-2 text-gray-700 dark:text-gray-300">
+                        <button @click="open = !open"
+                            class="w-full flex justify-between items-center focus:outline-none">
+                            <span>Halo, {{ Auth::user()->name }}</span>
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7">
+                                </path>
+                            </svg>
+                        </button>
 
-            {{-- Mobile Menu - Auth Check --}}
-            @if (Auth::check())
-                <div x-data="{ open: false }" class="relative px-3 py-2 text-gray-700 dark:text-gray-300">
-                    <button @click="open = !open" class="w-full flex justify-between items-center focus:outline-none">
-                        <span>Halo, {{ Auth::user()->name }}</span>
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <div x-show="open" @click.away="open = false" x-transition
-                        class="mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50">
-                        <a href="{{ route('dashboard') }}"
-                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            Dashboard
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit"
-                                class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-gray-700 dark:text-red-400">
-                                Logout
-                            </button>
-                        </form>
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="mt-2 bg-white dark:bg-gray-800 rounded-md shadow-lg overflow-hidden z-50">
+                            <a href="{{ route('dashboard') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                Dashboard
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-gray-700 dark:text-red-400">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            @else
-                <a href="{{ route('login') }}"
-                    class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
-                    Login
-                </a>
-            @endif
+                @else
+                    <a href="{{ route('login') }}"
+                        class="block px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+                        Login
+                    </a>
+                @endif
 
 
-            {{-- Theme Toggle Mobile --}}
-            <button @click="toggleTheme()"
-                class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
-                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
-                </svg>
-                <span x-text="currentTheme === 'dark' ? 'Tema Terang' : 'Tema Gelap'"></span>
-            </button>
-        </nav>
-    </div>
+                {{-- Theme Toggle Mobile --}}
+                <button @click="toggleTheme()"
+                    class="flex items-center px-3 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition">
+                    <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h1M4 12H3m15.325 3.325l-.707.707M5.388 5.388l-.707-.707M18.325 8.675l.707-.707M5.388 18.325l-.707.707M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                    </svg>
+                    <span x-text="currentTheme === 'dark' ? 'Tema Terang' : 'Tema Gelap'"></span>
+                </button>
+            </nav>
+        </div>
 </header>
