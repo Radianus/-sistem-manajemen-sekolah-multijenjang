@@ -2,7 +2,6 @@
 
 @section('content')
     {{-- Hero Slider --}}
-    @dd($sliders)
     @if ($sliders->isNotEmpty())
         <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-screen overflow-hidden">
             <div class="absolute inset-0 flex transition-transform ease-in-out duration-500"
