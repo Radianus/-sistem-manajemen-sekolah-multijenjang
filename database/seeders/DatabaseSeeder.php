@@ -39,5 +39,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GallerySeeder::class);
         $this->call(NewsSeeder::class);
         $this->call(HeroSliderSeeder::class);
+        $this->call(CalendarEventSeeder::class);
     }
 }

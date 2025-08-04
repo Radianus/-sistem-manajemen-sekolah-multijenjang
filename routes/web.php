@@ -102,6 +102,7 @@ Route::middleware(['auth', 'role:admin_sekolah|guru|siswa|orang_tua'])->prefix('
     Route::get('reports/grade-summary-filter', [ReportController::class, 'showGradeSummaryFilterForm'])->name('reports.gradeSummaryFilterForm');
     Route::get('reports/grade-summary', [ReportController::class, 'generateGradeSummary'])->name('reports.generateGradeSummary');
 
+    Route::get('calendar-events/export/pdf', [CalendarEventController::class, 'exportPdf'])->name('calendar_events.exportPdf');
 
     // Tugas (Assignments)
     Route::resource('assignments', AssignmentController::class);

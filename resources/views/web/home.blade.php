@@ -3,7 +3,16 @@
 @section('content')
     {{-- Hero Slider --}}
     @if ($sliders->isNotEmpty())
-        <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-[80vh] overflow-hidden">
+        <div x-data="{
+            currentSlide: 0,
+            sliders: {{ Js::from($sliders) }},
+            init() {
+                setInterval(() => {
+                    this.currentSlide = (this.currentSlide + 1) % this.sliders.length;
+                }, 10000);
+            }
+        }"
+            class="relative w-full h-screen flex-shrink-0 -mt-16 bg-cover bg-center overflow-hidden shadow-md backdrop-blur-sm">
             <div class="absolute inset-0 flex transition-transform ease-in-out duration-500"
                 :style="'transform: translateX(-' + currentSlide * 100 + '%)'">
                 @foreach ($sliders as $slider)
@@ -11,7 +20,9 @@
                         style="background-image: url('{{ Storage::url($slider->image_path) }}');">
                         <div class="bg-black bg-opacity-50 w-full h-full flex items-center justify-center">
                             <div class="text-center text-white p-6 max-w-2xl mx-auto">
-                                <h2 class="text-4xl md:text-5xl font-extrabold mb-2">{{ $slider->title }}</h2>
+                                <h2
+                                    class="text-4xl md:text-5xl font-extrabold mb-2 inset-0 bg-opacity-30 bg-black/10 rounded-lg p-4">
+                                    {{ $slider->title }}</h2>
                                 @if ($slider->subtitle)
                                     <p class="text-lg md:text-xl mb-4">{{ $slider->subtitle }}</p>
                                 @endif
@@ -61,7 +72,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse($latestNews as $newsItem)
                     <div
-                        class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+                        class="relative group perspective bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm transition-transform duration-500 transform-style-preserve-3d hover:rotate-y-3 hover:scale-[1.015] overflow-hidden flex flex-col hover:shadow-lg hover:shadow-blue-500/30">
                         @if ($newsItem->image_path)
                             <img src="{{ Storage::url($newsItem->image_path) }}" alt="{{ $newsItem->title }}"
                                 class="w-full h-48 object-cover">

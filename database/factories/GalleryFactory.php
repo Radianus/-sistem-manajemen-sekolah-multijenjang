@@ -29,6 +29,19 @@ class GalleryFactory extends Factory
 
         // Dummy image path (placeholder, assuming you have files)
         $imagePath = 'gallery/' . fake()->uuid() . '.jpg';
+        // Ambil semua file gambar dari folder storage/dummy
+
+        // ambil yg mulai dari nama file 'dummy/gallery
+        $imageFiles = Storage::disk('public')->files('dummy');
+        // Pastikan ada file gambar yang tersedia
+        $imageFiles = array_filter($imageFiles, function ($file) {
+            return str_starts_with($file, 'dummy/gallery');
+        });
+        if (empty($imageFiles)) {
+            return [];
+        }
+        // Pilih satu gambar secara acak
+        $imagePath = fake()->randomElement($imageFiles);
 
         return [
             'title' => fake()->sentence(rand(3, 5)),

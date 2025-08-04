@@ -1,4 +1,9 @@
-<header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors" x-data="{ open: false, currentTheme: localStorage.getItem('theme') || 'light' }">
+<header x-data="{ scrolled: false, currentTheme: localStorage.getItem('theme') || 'light' }" x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 50)"
+    :class="scrolled
+        ?
+        'bg-white dark:bg-gray-800 shadow-sm' :
+        'bg-transparent dark:bg-gray-900'"
+    class="sticky top-0 z-50 transition-colors duration-300 bg-white/50 dark:bg-gray-900/50 backdrop-blur-md shadow-md text-gray-900 dark:text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
 
         {{-- Logo Sekolah --}}
@@ -88,7 +93,7 @@
     <div x-show="open" x-collapse
         class="md:hidden border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
         <nav class="flex flex-col space-y-2 p-4">
-            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index']] as $item)
+            @foreach ([['label' => 'Beranda', 'route' => 'web.home'], ['label' => 'Berita', 'route' => 'web.news.index'], ['label' => 'Galeri', 'route' => 'web.gallery.index'], ['label' => 'Kalender', 'route' => 'web.calendar.index'], ['label' => 'Kontak', 'route' => 'web.contact'], ['label' => 'Tentang Kami', 'route' => 'web.about']] as $item)
                 <a href="{{ route($item['route']) }}"
                     class="block px-3 py-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                     {{ $item['label'] }}

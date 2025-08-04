@@ -8,6 +8,7 @@ use App\Models\CalendarEvent;
 use Spatie\Permission\Models\Role;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CalendarEventController extends Controller
 {
@@ -159,5 +160,27 @@ class CalendarEventController extends Controller
 
         $calendarEvent->delete();
         return redirect()->route('admin.calendar_events.index')->with('success', 'Acara kalender berhasil dihapus.');
+    }
+
+
+    /**
+     * Export academic calendar events to PDF.
+     */
+    public function exportPdf()
+    {
+        abort_if(!auth()->user()->hasRole('admin_sekolah') && !auth()->user()->hasRole('guru'), 403);
+
+
+        $calendarEvents = CalendarEvent::orderBy('start_date')->get();
+
+        $data = [
+            'title' => 'Laporan Kalender Akademik',
+            'date' => date('d/m/Y'),
+            'calendarEvents' => $calendarEvents
+        ];
+
+        $pdf = Pdf::loadView('admin.calendar_events.pdf_export', $data);
+
+        return $pdf->download('kalender-akademik-' . time() . '.pdf');
     }
 }

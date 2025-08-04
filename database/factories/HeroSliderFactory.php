@@ -21,9 +21,11 @@ class HeroSliderFactory extends Factory
     public function definition(): array
     {
         $imagePaths = [
-            'dummy/20250804171119-y78BZy.jpg',
-            'dummy/20250804171122-ARXApC.jpg',
-            'dummy/20250804171124-KFCcRp.jpg',
+            'dummy/slider-20250804190626-OJRgDU.jpg',
+            'dummy/slider-20250804190629-o2GtLC.jpg',
+            'dummy/slider-20250804190633-BBJC4F.jpg',
+            'dummy/slider-20250804190636-R81cC3.jpg',
+            'dummy/slider-20250804190639-mPM1EK.jpg',
         ];
         return [
             'title' => fake()->randomElement([

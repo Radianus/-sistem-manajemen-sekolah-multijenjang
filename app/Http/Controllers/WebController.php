@@ -75,7 +75,6 @@ class WebController extends Controller
      */
     public function calendarIndex()
     {
-        // Ambil semua event yang aktif dan ditargetkan ke publik
         $events = CalendarEvent::activeBetween(Carbon::now()->startOfYear(), Carbon::now()->endOfYear())
             ->where(function ($query) {
                 $query->targetedTo('all');
