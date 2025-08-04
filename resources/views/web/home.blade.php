@@ -3,7 +3,7 @@
 @section('content')
     {{-- Hero Slider --}}
     @if ($sliders->isNotEmpty())
-        <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-screen overflow-hidden">
+        <div x-data="{ currentSlide: 0, sliders: {{ Js::from($sliders) }} }" class="relative w-full h-[80vh] overflow-hidden">
             <div class="absolute inset-0 flex transition-transform ease-in-out duration-500"
                 :style="'transform: translateX(-' + currentSlide * 100 + '%)'">
                 @foreach ($sliders as $slider)
@@ -52,25 +52,8 @@
                 </svg>
             </button>
         </div>
-    @else
-        <div class="bg-gray-200 dark:bg-gray-700 h-screen flex items-center justify-center">
-            <p class="text-gray-500 dark:text-gray-400">Tidak ada slider yang tersedia saat ini.</p>
-        </div>
     @endif
-    {{-- Selamat Datang --}}
-    <section class="bg-white dark:bg-gray-900 py-20 transition-colors">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-extrabold mb-6 text-center text-gray-800 dark:text-white">Selamat Datang di Sistem
-                Sekolahku</h1>
-            <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 text-center">Sistem informasi sekolah yang memudahkan
-                pengelolaan data dan informasi sekolah.</p>
-            <div class="text-center">
-                <a href="#"
-                    class="inline-block px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow transition">Pelajari
-                    Lebih Lanjut</a>
-            </div>
-        </div>
-    </section>
+
     {{-- Berita Terbaru --}}
     <section class="bg-gray-50 dark:bg-gray-900 py-20 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,8 +72,7 @@
                             </div>
                         @endif
                         <div class="p-6 flex-grow">
-                            <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">
-                                {{ $newsItem->title }}
+                            <h3 class="text-xl font-semibold text-slate-800 dark:text-white mb-2">{{ $newsItem->title }}
                             </h3>
                             <p class="text-sm text-slate-600 dark:text-gray-400 mb-2">
                                 {{ $newsItem->published_at->format('d M Y') }} oleh
@@ -107,8 +89,7 @@
                         </div>
                     </div>
                 @empty
-                    <p class="col-span-full text-center text-gray-500 dark:text-gray-400">Belum ada berita terbaru saat
-                        ini.
+                    <p class="col-span-full text-center text-gray-500 dark:text-gray-400">Belum ada berita terbaru saat ini.
                     </p>
                 @endforelse
             </div>
@@ -134,8 +115,7 @@
                         </a>
                     </div>
                 @empty
-                    <p class="col-span-full text-center text-gray-500 dark:text-gray-400">Belum ada gambar di galeri
-                        saat
+                    <p class="col-span-full text-center text-gray-500 dark:text-gray-400">Belum ada gambar di galeri saat
                         ini.</p>
                 @endforelse
             </div>
@@ -157,8 +137,7 @@
                 @forelse($importantAnnouncements as $announcement)
                     <div
                         class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 rounded-xl shadow-sm hover:shadow-md transition">
-                        <h3 class="text-xl font-semibold text-slate-800 dark:text-white">{{ $announcement->title }}
-                        </h3>
+                        <h3 class="text-xl font-semibold text-slate-800 dark:text-white">{{ $announcement->title }}</h3>
                         <p class="text-sm text-slate-600 dark:text-gray-400 mb-2">
                             {{ $announcement->published_at->format('d M Y') }}
                         </p>
