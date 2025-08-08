@@ -32,7 +32,7 @@
                         @else
                             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&color=7F9CF5&background=transparent"
                                 alt="{{ Auth::user()->name }}"
-                                class="h-8 w-8 rounded-lg object-cover ring-2 ring-white dark:ring-gray-700">
+                                class="h-8 w-8 rounded-lg object-cover ring-2  dark:ring-gray-700">
                         @endif
                     </button>
                     <div

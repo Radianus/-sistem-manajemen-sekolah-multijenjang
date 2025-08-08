@@ -9,7 +9,11 @@
                        transform transition-transform duration-300 ease-in-out
                        lg:translate-x-0 lg:flex-shrink-0 lg:block overflow-y-auto">
     <div class="px-6 pt-4 pb-3 border-b border-gray-200 dark:border-gray-700 h-16 flex items-center transition-colors ">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white"> Akademika </h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+            <a href="{{ route('dashboard') }}" class="text-xl font-bold dark:text-white">
+                {{ $globalSettings->school_name ?? config('app.name', 'Akademika') }}
+            </a>
+        </h2>
         <button @click="sidebarOpen = !sidebarOpen"
             class="lg:hidden ml-auto text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors">
             <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"

@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ config('app.name', 'SekolahApp') }}</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}"> {{-- PASTIKAN BARIS INI ADA DI SINI --}}
-
+    <title>{{ $globalSettings->school_name ?? config('app.name', 'SekolahApp') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="shortcut icon" href="favicon-32x32.png" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
