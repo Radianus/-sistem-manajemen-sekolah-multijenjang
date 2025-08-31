@@ -85,8 +85,8 @@
             
 /* Scrollbar dasar: ramping dan modern */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Area track transparan */
