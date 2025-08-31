@@ -108,17 +108,18 @@
 
                             <div class="mb-4">
                                 <x-input-label for="start_time" :value="__('Waktu Mulai')" />
-                                <x-text-input id="start_time" class="block mt-1 w-full" type="time" name="start_time"
-                                    :value="old('start_time')" required />
+                                <input id="start_time" type="text" name="start_time" class="block mt-1 w-full"
+                                    placeholder="Pilih waktu mulai">
                                 <x-input-error :messages="$errors->get('start_time')" class="mt-2" />
                             </div>
 
                             <div class="mb-4">
                                 <x-input-label for="end_time" :value="__('Waktu Selesai')" />
-                                <x-text-input id="end_time" class="block mt-1 w-full" type="time" name="end_time"
-                                    :value="old('end_time')" required />
+                                <input id="end_time" type="text" name="end_time" class="block mt-1 w-full"
+                                    placeholder="Pilih waktu selesai">
                                 <x-input-error :messages="$errors->get('end_time')" class="mt-2" />
                             </div>
+
 
                             <div class="mb-6">
                                 <x-input-label for="room_number" :value="__('Nomor Ruangan (Opsional)')" />

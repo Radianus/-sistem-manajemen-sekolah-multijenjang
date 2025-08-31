@@ -1,6 +1,6 @@
 <!-- resources/views/layouts/app.blade.php -->
 <!DOCTYPE html>
-<html lang="en" x-data="mainApp()" x-init="init()" :class="{ 'dark': darkMode, }">
+<html lang="id" x-data="mainApp()" x-init="init()" :class="{ 'dark': darkMode, }">
 
 <head>
     <meta charset="UTF-8" />
@@ -29,6 +29,8 @@
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </head>
 
