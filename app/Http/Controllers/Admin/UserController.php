@@ -97,7 +97,6 @@ class UserController extends Controller
      */
     public function destroy(User $user) // Menggunakan Route Model Binding
     {
-        // Logika untuk menghapus user akan ditambahkan nanti
         $user->delete();
         return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
     }

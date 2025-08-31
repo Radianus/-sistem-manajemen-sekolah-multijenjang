@@ -260,84 +260,86 @@
                     request()->routeIs('admin.teaching_assignments.*') ||
                     request()->routeIs('admin.assignments.*');
             @endphp
-            {{-- menu untuk GURU --}}
-            <div x-data="{ open: false }" x-init="open = {{ $isMenuGuru ? 'true' : 'false' }}" class="relative hidden">
-                <button @click="open = !open"
-                    class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
-                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
-                        </path>
-                    </svg>
-                    {{ __('Akademik Guru') }}
-                    <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                        </path>
-                    </svg>
-                </button>
-                <div x-show="open" class="pl-4 mt-2 space-y-2">
-                    @role('guru')
-                        <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
-                            request()->routeIs('admin.reports.generateReportCard')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            {{ __('Laporan Rapor') }}
-                        </x-nav-link>
+            @role('guru')
+                {{-- menu untuk GURU --}}
+                <div x-data="{ open: false }" x-init="open = {{ $isMenuGuru ? 'true' : 'false' }}" class="relative hidden">
+                    <button @click="open = !open"
+                        class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
+                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
+                            </path>
+                        </svg>
+                        {{ __('Akademik Guru') }}
+                        <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div x-show="open" class="pl-4 mt-2 space-y-2">
+                        @role('guru')
+                            <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
+                                request()->routeIs('admin.reports.generateReportCard')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                {{ __('Laporan Rapor') }}
+                            </x-nav-link>
 
-                        <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
-                            request()->routeIs('admin.reports.generateReportCard')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            {{ __('Cetak Rapor Siswa') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            {{ __('Input Nilai') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.attendances.index')" :active="request()->routeIs('admin.attendances.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            {{ __('Absensi Siswa') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.schedules.index')" :active="request()->routeIs('admin.schedules.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
-                                </path>
-                            </svg>
-                            {{ __('Jadwal Mengajar') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13.435m0-13.435a4.487 4.487 0 00-4.487 4.487v2.091M12 6.253a4.487 4.487 0 014.487 4.487v2.091m-7.436 0l.92-3.447A2.246 2.246 0 0116.518 10h1.968a2.246 2.246 0 012.235 2.09l-.754 2.822m-7.436 0l-.92 3.447A2.246 2.246 0 007.482 10H5.514a2.246 2.246 0 00-2.235 2.09l.754 2.822m13.774 0H7.236">
-                                </path>
-                            </svg>
-                            {{ __('Materi & Tugas') }}
-                        </x-nav-link>
-                    @endrole
+                            <x-nav-link :href="route('admin.reports.reportCardFilterForm')" :active="request()->routeIs('admin.reports.reportCardFilterForm') ||
+                                request()->routeIs('admin.reports.generateReportCard')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                {{ __('Cetak Rapor Siswa') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                {{ __('Input Nilai') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.attendances.index')" :active="request()->routeIs('admin.attendances.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                {{ __('Absensi Siswa') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.schedules.index')" :active="request()->routeIs('admin.schedules.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
+                                    </path>
+                                </svg>
+                                {{ __('Jadwal Mengajar') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13.435m0-13.435a4.487 4.487 0 00-4.487 4.487v2.091M12 6.253a4.487 4.487 0 014.487 4.487v2.091m-7.436 0l.92-3.447A2.246 2.246 0 0116.518 10h1.968a2.246 2.246 0 012.235 2.09l-.754 2.822m-7.436 0l-.92 3.447A2.246 2.246 0 007.482 10H5.514a2.246 2.246 0 00-2.235 2.09l.754 2.822m13.774 0H7.236">
+                                    </path>
+                                </svg>
+                                {{ __('Materi & Tugas') }}
+                            </x-nav-link>
+                        @endrole
+                    </div>
                 </div>
-            </div>
+            @endrole
             @php
                 $isMenuSiswaOpen =
                     request()->routeIs('admin.grades.*') ||
@@ -346,62 +348,64 @@
                     request()->routeIs('admin.assignments.*');
             @endphp
             {{-- Menu untuk Siswa --}}
-            <div x-data="{ open: {{ $isMenuSiswaOpen ? 'true' : 'false' }} }" class="relative"> <button @click="open = !open"
-                    class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
-                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
-                        </path>
-                    </svg>
-                    {{ __('Akademik Siswa') }}
-                    <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                        </path>
-                    </svg>
-                </button>
-                <div x-show="open" class="pl-4 mt-2 space-y-2">
-                    @role('siswa')
-                        <x-nav-link :href="route('admin.schedules.index')" :active="request()->routeIs('admin.schedules.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
-                                </path>
-                            </svg>
-                            {{ __('Jadwal Pelajaran Saya') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            {{ __('Nilai Saya') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.attendances.index')" :active="request()->routeIs('admin.attendances.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            {{ __('Absensi Saya') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
-                            <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 6.253v13.435m0-13.435a4.487 4.487 0 00-4.487 4.487v2.091M12 6.253a4.487 4.487 0 014.487 4.487v2.091m-7.436 0l.92-3.447A2.246 2.246 0 0116.518 10h1.968a2.246 2.246 0 012.235 2.09l-.754 2.822m-7.436 0l-.92 3.447A2.246 2.246 0 007.482 10H5.514a2.246 2.246 0 00-2.235 2.09l.754 2.822m13.774 0H7.236">
-                                </path>
-                            </svg>
-                            {{ __('Materi & Tugas') }}
-                        </x-nav-link>
-                    @endrole
+            @role('siswa')
+                <div x-data="{ open: {{ $isMenuSiswaOpen ? 'true' : 'false' }} }" class="relative"> <button @click="open = !open"
+                        class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
+                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
+                            </path>
+                        </svg>
+                        {{ __('Akademik Siswa') }}
+                        <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div x-show="open" class="pl-4 mt-2 space-y-2">
+                        @role('siswa')
+                            <x-nav-link :href="route('admin.schedules.index')" :active="request()->routeIs('admin.schedules.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
+                                    </path>
+                                </svg>
+                                {{ __('Jadwal Pelajaran Saya') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.grades.index')" :active="request()->routeIs('admin.grades.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                    </path>
+                                </svg>
+                                {{ __('Nilai Saya') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.attendances.index')" :active="request()->routeIs('admin.attendances.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                {{ __('Absensi Saya') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.assignments.index')" :active="request()->routeIs('admin.assignments.*')">
+                                <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6.253v13.435m0-13.435a4.487 4.487 0 00-4.487 4.487v2.091M12 6.253a4.487 4.487 0 014.487 4.487v2.091m-7.436 0l.92-3.447A2.246 2.246 0 0116.518 10h1.968a2.246 2.246 0 012.235 2.09l-.754 2.822m-7.436 0l-.92 3.447A2.246 2.246 0 007.482 10H5.514a2.246 2.246 0 00-2.235 2.09l.754 2.822m13.774 0H7.236">
+                                    </path>
+                                </svg>
+                                {{ __('Materi & Tugas') }}
+                            </x-nav-link>
+                        @endrole
 
+                    </div>
                 </div>
-            </div>
+            @endrole
             @php
                 $isMenuOrtuOpen =
                     request()->routeIs('admin.grades.*') ||
@@ -409,71 +413,73 @@
                     request()->routeIs('admin.schedules.*');
             @endphp
             {{-- Menu untuk Orang Tua --}}
-            <div x-data="{ open: {{ $isMenuOrtuOpen ? 'true' : 'false' }} }" class="relative">
-                <button @click="open = !open"
-                    class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
-                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
-                        </path>
-                    </svg>
-                    {{ __('Informasi Anak') }}
-                    <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                        </path>
-                    </svg>
-                </button>
-                <div x-show="open" class="pl-4 mt-2 space-y-2">
-                    @role('orang_tua')
-                        @if (Auth::user()->children->isNotEmpty())
-                            @foreach (Auth::user()->children as $child)
-                                <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
+            @role('orang_tua')
+                <div x-data="{ open: {{ $isMenuOrtuOpen ? 'true' : 'false' }} }" class="relative">
+                    <button @click="open = !open"
+                        class="flex items-center w-full px-2 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors focus:outline-none">
+                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6V4m0 2a2 2 0 00-2 2v8a2 2 0 002 2m0-12h2a2 2 0 012 2v8a2 2 0 01-2 2H9a2 2 0 00-2 2v8a2 2 0 002 2h6">
+                            </path>
+                        </svg>
+                        {{ __('Informasi Anak') }}
+                        <svg class="h-4 w-4 ml-auto transform" :class="{ 'rotate-90': open }" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div x-show="open" class="pl-4 mt-2 space-y-2">
+                        @role('orang_tua')
+                            @if (Auth::user()->children->isNotEmpty())
+                                @foreach (Auth::user()->children as $child)
+                                    <div class="block px-2 py-2 text-xs text-gray-400 uppercase tracking-wider mt-4">
 
-                                    {{ $child->user->name ?? 'Anak Anda' }}
-                                </div>
-                                <x-nav-link :href="route('admin.grades.index', ['student_id' => $child->id])" :active="request()->routeIs('admin.grades.*') && request('student_id') == $child->id">
-                                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                    {{ __('Nilai ') }}
-                                    {{ Str::limit($child->user->name ?? 'Anak', 10) }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('admin.attendances.index', ['student_id' => $child->id])" :active="request()->routeIs('admin.attendances.*') &&
-                                    request('student_id') == $child->id">
-                                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {{ __('Absensi ') }}
-                                    {{ Str::limit($child->user->name ?? 'Anak', 10) }}
-                                </x-nav-link>
-                                <x-nav-link :href="route('admin.schedules.index', [
-                                    'class_id' => $child->school_class_id,
-                                ])" :active="request()->routeIs('admin.schedules.*') &&
-                                    request('class_id') == $child->school_class_id">
-                                    <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
-                                        </path>
-                                    </svg>
-                                    {{ __('Jadwal Kelas ') }}
-                                    {{ Str::limit($child->schoolClass->name ?? 'Anak', 10) }}
-                                </x-nav-link>
-                            @endforeach
-                        @else
-                            <p class="px-2 py-1 text-xs text-gray-500 dark:text-gray-400">Belum ada anak terkait.</p>
-                        @endif
-                    @endrole
+                                        {{ $child->user->name ?? 'Anak Anda' }}
+                                    </div>
+                                    <x-nav-link :href="route('admin.grades.index', ['student_id' => $child->id])" :active="request()->routeIs('admin.grades.*') &&
+                                        request('student_id') == $child->id">
+                                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                            </path>
+                                        </svg>
+                                        {{ __('Nilai ') }}
+                                        {{ Str::limit($child->user->name ?? 'Anak', 10) }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('admin.attendances.index', ['student_id' => $child->id])" :active="request()->routeIs('admin.attendances.*') &&
+                                        request('student_id') == $child->id">
+                                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ __('Absensi ') }}
+                                        {{ Str::limit($child->user->name ?? 'Anak', 10) }}
+                                    </x-nav-link>
+                                    <x-nav-link :href="route('admin.schedules.index', [
+                                        'class_id' => $child->school_class_id,
+                                    ])" :active="request()->routeIs('admin.schedules.*') &&
+                                        request('class_id') == $child->school_class_id">
+                                        <svg class="h-5 w-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M8 7V3m8 4V3m-9 8h.01M7 11h.01M7 15h.01M16 15h.01M17 12H7m14-4a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8z">
+                                            </path>
+                                        </svg>
+                                        {{ __('Jadwal Kelas ') }}
+                                        {{ Str::limit($child->schoolClass->name ?? 'Anak', 10) }}
+                                    </x-nav-link>
+                                @endforeach
+                            @else
+                                <p class="px-2 py-1 text-xs text-gray-500 dark:text-gray-400">Belum ada anak terkait.</p>
+                            @endif
+                        @endrole
+                    </div>
                 </div>
-            </div>
-
+            @endrole
             @php
                 $isMenu =
                     request()->routeIs('admin.announcements.*') ||
